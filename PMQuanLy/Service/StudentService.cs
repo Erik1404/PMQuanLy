@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
 using PMQuanLy.Models;
+using System.Text.RegularExpressions;
 
 namespace PMQuanLy.Service
 {
@@ -17,13 +18,58 @@ namespace PMQuanLy.Service
             _dbContext = dbContext;
         }
 
+
+        //ADD STUDENT START
         public async Task<Student> AddStudent(Student student)
         {
+            if (!IsValidEmail(student.Email))
+            {
+                throw new ArgumentException("Invalid email address");
+            }
+
+            if (!IsValidPassword(student.Password))
+            {
+                throw new ArgumentException("Password must be at least 8 characters long");
+            }
+
+            if (!IsValidPhoneNumber(student.PhoneParent))
+            {
+                throw new ArgumentException("Phone number must be 10 digits");
+            }
+
             _dbContext.Students.Add(student);
-            await _dbContext.SaveChangesAsync();
-            return student;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return student;
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
         }
 
+        private bool IsValidPhoneNumber(int phoneNumber)
+        {
+            string phoneNumberString = phoneNumber.ToString();
+
+            // Phone number must be 10 digits and can start with number 0 with form NumberPhone of VN
+            return phoneNumberString.Length == 10 && phoneNumberString.All(char.IsDigit);
+        }
+        private bool IsValidEmail(string email)
+        {
+            // Check Form EMAIL
+            return !string.IsNullOrEmpty(email) && email.Contains("@");
+        }
+        
+        private bool IsValidPassword(string password)
+        {
+            // Password need >= 8 characters
+            return !string.IsNullOrEmpty(password) && password.Length >= 8;
+        }
+
+        //Delete
         public async Task<bool> DeleteStudent(int studentId)
         {
             var student = await _dbContext.Students.FindAsync(studentId);
@@ -40,6 +86,5 @@ namespace PMQuanLy.Service
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
     }
 }
