@@ -50,6 +50,56 @@ namespace PMQuanLy.Service
             }
         }
 
+        //ADD STUDENT END
+
+
+        //Delete Student
+        public async Task<bool> DeleteStudent(int studentId)
+        {
+            var student = await _dbContext.Students.FindAsync(studentId);
+            if (student == null)
+                return false;
+            _dbContext.Students.Remove(student);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+
+        // Update Student
+        public async Task<bool> UpdateStudent(Student student)
+        {
+            // Kiểm tra các ràng buộc trước khi cập nhật
+            if (!IsValidEmail(student.Email))
+            {
+                throw new ArgumentException("Invalid email address");
+            }
+
+            if (!IsValidPassword(student.Password))
+            {
+                throw new ArgumentException("Password must be at least 8 characters long");
+            }
+
+            if (!IsValidPhoneNumber(student.PhoneParent))
+            {
+                throw new ArgumentException("Phone number must be 10 digits");
+            }
+
+            _dbContext.Entry(student).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                // Xử lý lỗi khi lưu vào cơ sở dữ liệu
+                throw;
+            }
+        }
+
+
+        // Check Form Email , Password and Phone
         private bool IsValidPhoneNumber(int phoneNumber)
         {
             string phoneNumberString = phoneNumber.ToString();
@@ -62,29 +112,11 @@ namespace PMQuanLy.Service
             // Check Form EMAIL
             return !string.IsNullOrEmpty(email) && email.Contains("@");
         }
-        
+
         private bool IsValidPassword(string password)
         {
             // Password need >= 8 characters
             return !string.IsNullOrEmpty(password) && password.Length >= 8;
-        }
-
-        //Delete
-        public async Task<bool> DeleteStudent(int studentId)
-        {
-            var student = await _dbContext.Students.FindAsync(studentId);
-            if (student == null)
-                return false;
-            _dbContext.Students.Remove(student);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> UpdateStudent(Student student)
-        {
-            _dbContext.Entry(student).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return true;
         }
     }
 }

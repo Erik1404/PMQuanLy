@@ -54,7 +54,7 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpPut("{studentId}")]
-        public async Task<ActionResult> UpdateStudent(int studentId, Student student)
+        public async Task<ActionResult> UpdateStudent(int studentId, [FromBody] Student student)
         {
             if (studentId != student.StudentId)
                 return BadRequest(new { message = "Data something wrong" });
