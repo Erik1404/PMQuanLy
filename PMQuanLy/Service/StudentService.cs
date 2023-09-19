@@ -93,7 +93,7 @@ namespace PMQuanLy.Service
             }
             catch (DbUpdateException)
             {
-                // Xử lý lỗi khi lưu vào cơ sở dữ liệu
+                
                 throw;
             }
         }
