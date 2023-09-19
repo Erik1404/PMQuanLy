@@ -31,11 +31,11 @@ namespace PMQuanLy.Controllers
             var addedStudent = await _studentService.AddStudent(student);
             if (addedStudent != null)
             {
-                return Ok(new { message = "Thêm sinh viên thành công", student = addedStudent });
+                return Ok(new { message = "Add success", student = addedStudent });
             }
             else
             {
-                return BadRequest(new { message = "Thêm sinh viên thất bại" });
+                return BadRequest(new { message = "Add failed" });
             }
         }
 
@@ -45,11 +45,11 @@ namespace PMQuanLy.Controllers
             var deleted = await _studentService.DeleteStudent(studentId);
             if (deleted)
             {
-                return Ok(new { message = "Xóa sinh viên thành công" });
+                return Ok(new { message = "Delete success" });
             }
             else
             {
-                return NotFound(new { message = "Không tìm thấy sinh viên" });
+                return NotFound(new { message = "Not found student" });
             }
         }
 
@@ -57,16 +57,16 @@ namespace PMQuanLy.Controllers
         public async Task<ActionResult> UpdateStudent(int studentId, Student student)
         {
             if (studentId != student.StudentId)
-                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
+                return BadRequest(new { message = "Data something wrong" });
 
             var updated = await _studentService.UpdateStudent(student);
             if (updated)
             {
-                return Ok(new { message = "Cập nhật sinh viên thành công" });
+                return Ok(new { message = "Update information success" });
             }
             else
             {
-                return NotFound(new { message = "Không tìm thấy sinh viên" });
+                return NotFound(new { message = "Not found Student" });
             }
         }
     }
