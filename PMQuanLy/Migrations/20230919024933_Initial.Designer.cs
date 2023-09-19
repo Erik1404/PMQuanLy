@@ -11,7 +11,7 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20230918065924_Initial")]
+    [Migration("20230919024933_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

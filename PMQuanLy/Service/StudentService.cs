@@ -4,6 +4,7 @@ using PMQuanLy.Models;
 
 namespace PMQuanLy.Service
 {
+    // Attention : go to Program.cs, Add builder to use Service
     public class StudentService : IStudentService
     {
         private readonly PMQLDbContext _dbContext;
