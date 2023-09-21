@@ -9,16 +9,22 @@ namespace PMQuanLy.Service
     public class StudentService : IStudentService
     {
         private readonly PMQLDbContext _dbContext;
-        public async Task<List<Student>> GetAllStudents()
-        {
-            return await _dbContext.Students.ToListAsync();
-        }
+        
         public StudentService(PMQLDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
+        public async Task<List<Student>> GetAllStudents()
+        {
+            return await _dbContext.Students.ToListAsync();
+        }
 
+       /* public async Task<bool> GetStudentById(int studentId)
+        {
+            
+            return _dbContext.Students.FirstOrDefault(s => s.StudentId == studentId);
+        }*/
         //ADD STUDENT START
         public async Task<Student> AddStudent(Student student)
         {

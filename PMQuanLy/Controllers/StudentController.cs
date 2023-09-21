@@ -24,7 +24,17 @@ namespace PMQuanLy.Controllers
             var students = await _studentService.GetAllStudents();
             return Ok(students);
         }
-
+/*
+        [HttpGet("{id}")]
+        public IActionResult GetStudentById(int id)
+        {
+            var student = _studentService.GetStudentById(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return Ok(student);
+        }*/
         [HttpPost]
         public async Task<ActionResult<Student>> AddStudent(Student student)
         {

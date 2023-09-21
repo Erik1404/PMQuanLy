@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Sql server connect
 builder.Services.AddDbContext<PMQLDbContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PMQuanLy"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("qlhoctap"));
 });
 builder.Services.AddControllers();
 //Sql server connect
