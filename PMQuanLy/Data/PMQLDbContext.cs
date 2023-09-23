@@ -11,5 +11,12 @@ namespace PMQuanLy.Data
         }
        /* public DbSet<User> Users { get; set; }*/
         public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<CourseRegistration> CourseRegistrations { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Tuition> Tuitions { get; set; }
+        public DbSet<Report> Reports { get; set; }
+
     }
 }

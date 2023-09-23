@@ -1,7 +1,10 @@
-﻿namespace PMQuanLy.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PMQuanLy.Models
 {
     public class Schedule
     {
+        [Key]
         public int ScheduleId { get; set; }
         public int TeacherId { get; set; }
         public int CourseId { get; set; }
