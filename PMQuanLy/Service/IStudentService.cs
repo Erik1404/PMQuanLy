@@ -8,7 +8,7 @@ namespace PMQuanLy.Service
         Task<Student> AddStudent(Student student);
         Task<bool> DeleteStudent(int studentId);
         Task<bool> UpdateStudent(Student student);
-      
+
 
     }
 }

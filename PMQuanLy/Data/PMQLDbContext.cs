@@ -18,5 +18,7 @@ namespace PMQuanLy.Data
         public DbSet<Tuition> Tuitions { get; set; }
         public DbSet<Report> Reports { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
     }
 }
