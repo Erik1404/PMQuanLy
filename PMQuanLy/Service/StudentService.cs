@@ -30,17 +30,17 @@ namespace PMQuanLy.Service
         {
             if (!IsValidEmail(student.Email))
             {
-                throw new ArgumentException("Invalid email address");
+                throw new ArgumentException("Email không hợp lệ");
             }
 
             if (!IsValidPassword(student.Password))
             {
-                throw new ArgumentException("Password must be at least 8 characters long");
+                throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
             }
 
             if (!IsValidPhoneNumber(student.PhoneParent))
             {
-                throw new ArgumentException("Phone number must be 10 digits");
+                throw new ArgumentException("Số điện thoại cần 10 số");
             }
 
             _dbContext.Students.Add(student);

@@ -16,7 +16,7 @@ namespace PMQuanLy.Service
         }
 
 
-        public User Authenticate(string email, string password)
+        public User Login(string email, string password)
         {
             var user = _dbContext.Users.SingleOrDefault(u => u.Email == email && u.Password == password);
 
@@ -26,17 +26,24 @@ namespace PMQuanLy.Service
             return user;
         }
 
-        public User Register(string email, string password)
+        public User Register(User newRegister)
         {
             // Kiểm tra xem email đã tồn tại chưa
-            if(_dbContext.Users.Any(u => u.Email == email))
+            if (_dbContext.Users.Any(u => u.Email == newRegister.Email))
             {
-                return null;
-            }    
+                return null; // Email đã tồn tại, không thể đăng ký
+            }
+
             var newUser = new User
             {
-                Email = email,
-                Password = password
+                Email = newRegister.Email,
+                Password = newRegister.Password,
+                FirstName = newRegister.FirstName,
+                LastName = newRegister.LastName,
+                DateOfBirth = newRegister.DateOfBirth,
+                Gender = newRegister.Gender,
+                Address = newRegister.Address,
+                Role = newRegister.Role,
             };
 
             _dbContext.Users.Add(newUser);
@@ -44,5 +51,28 @@ namespace PMQuanLy.Service
             return newUser;
         }
 
+        public string CheckRoleUser(string role)
+        {
+            if (role == "Student")
+            {
+                // Thực hiện các thao tác cho role Student
+                return "Đang hoạt động với vai trò Student";
+            }
+            else if (role == "Teacher")
+            {
+                // Thực hiện các thao tác cho role Teacher
+                return "Đang hoạt động với vai trò Teacher";
+            }
+            else if (role == "Admin")
+            {
+                // Thực hiện các thao tác cho role Admin
+                return "Đang hoạt động với vai trò Admin";
+            }
+            else
+            {
+                // Xử lý khi không có quyền truy cập
+                return "Không có quyền truy cập";
+            }
+        }
     }
 }

@@ -4,7 +4,8 @@ namespace PMQuanLy.Service
 {
     public interface IUserService
     {
-        User Authenticate(string email, string password);
-        User Register(string email, string password);
+        User Login(string email, string password);
+        User Register(User newRegister);
+        string CheckRoleUser(string email);
     }
 }
