@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
 using PMQuanLy.Models;
 using System.Security.Cryptography;
@@ -25,7 +26,6 @@ namespace PMQuanLy.Service
 
             return user;
         }
-
         public User Register(User newRegister)
         {
             // Kiểm tra xem email đã tồn tại chưa

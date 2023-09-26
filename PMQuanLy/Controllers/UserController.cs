@@ -16,10 +16,10 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] User loginDTO)
+        public IActionResult Login(string Email, string Password)
         {
-            // Thực hiện xác minh danh tính với loginDTO.Email và loginDTO.Password
-            var user = _userService.Login(loginDTO.Email, loginDTO.Password);
+            // Thực hiện xác minh danh tính với Email và Password
+            var user = _userService.Login(Email, Password);
 
             if (user == null)
             {
@@ -34,7 +34,8 @@ namespace PMQuanLy.Controllers
                 message = "Đăng nhập thành công.",
                 user = new
                 {
-                    Email = user.Email,
+                    Email = Email, // Trả về email từ tham số Email
+                    Password = Password, // Trả về mật khẩu từ tham số Password (Lưu ý: Trong thực tế, bạn không nên trả về mật khẩu)
                     Role = user.Role,
                     // Thêm các trường khác mà bạn muốn hiển thị
                 },
@@ -43,6 +44,8 @@ namespace PMQuanLy.Controllers
 
             return Ok(response);
         }
+
+
 
 
 
@@ -61,6 +64,21 @@ namespace PMQuanLy.Controllers
         }
 
 
+
+        [HttpPost("register/student")]
+        public IActionResult RegisterForStudent([FromBody] Student newStudent)
+        {
+            var registeredStudent = _userService.RegisterForStudent(newStudent);
+
+            if (registeredStudent == null)
+            {
+                return BadRequest(new { message = "Email đã tồn tại." });
+            }
+
+            return Ok(registeredStudent);
+        }
+
+
         [HttpGet("user-action")]
         public IActionResult UserAction()
         {
@@ -72,5 +90,8 @@ namespace PMQuanLy.Controllers
 
             return Ok(roleMessage);
         }
+
+
+
     }
 }

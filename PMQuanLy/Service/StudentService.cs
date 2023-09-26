@@ -20,12 +20,63 @@ namespace PMQuanLy.Service
             return await _dbContext.Students.ToListAsync();
         }
 
-        /* public async Task<bool> GetStudentById(int studentId)
-         {
 
-             return _dbContext.Students.FirstOrDefault(s => s.StudentId == studentId);
-         }*/
-        //ADD STUDENT START
+        //Login and Register for Student
+        public Student LoginForStudent(string email, string password)
+        {
+            var student = _dbContext.Students.SingleOrDefault(u => u.Email == email && u.Password == password);
+
+            if (student == null)
+                return null;
+
+            return student;
+        }
+
+        public Student RegisterForStudent(Student newStudent)
+        {
+            // Kiểm tra xem email đã tồn tại chưa
+            if (_dbContext.Students.Any(u => u.Email == newStudent.Email))
+            {
+                return null; // Hoặc thực hiện xử lý lỗi nếu cần
+            }
+
+            // Tạo một đối tượng User từ dữ liệu của Student
+            var newStd = new Student
+            {
+                Email = newStudent.Email,
+                Password = newStudent.Password,
+                FirstName = newStudent.FirstName,
+                LastName = newStudent.LastName,
+                DateOfBirth = newStudent.DateOfBirth,
+                Gender = newStudent.Gender,
+                Address = newStudent.Address,
+                ParentPhone = newStudent.ParentPhone,
+                ParentName = newStudent.ParentName,
+                Role = "Student", // Đặt vai trò là "Student"
+            };
+
+            if (!IsValidEmail(newStd.Email))
+            {
+                throw new ArgumentException("Email không hợp lệ");
+            }
+
+            if (!IsValidPassword(newStd.Password))
+            {
+                throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
+            }
+
+            if (!IsValidPhoneNumber(newStd.ParentPhone))
+            {
+                throw new ArgumentException("Số điện thoại cần 10 số");
+            }
+
+            _dbContext.Students.Add(newStd);
+            _dbContext.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+            return newStd;
+        }
+
+       
+/*        //ADD STUDENT START
         public async Task<Student> AddStudent(Student student)
         {
             if (!IsValidEmail(student.Email))
@@ -38,7 +89,7 @@ namespace PMQuanLy.Service
                 throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
             }
 
-            if (!IsValidPhoneNumber(student.PhoneParent))
+            if (!IsValidPhoneNumber(student.ParentPhone))
             {
                 throw new ArgumentException("Số điện thoại cần 10 số");
             }
@@ -56,7 +107,7 @@ namespace PMQuanLy.Service
             }
         }
 
-        //ADD STUDENT END
+        //ADD STUDENT END*/
 
 
         //Delete Student
@@ -85,7 +136,7 @@ namespace PMQuanLy.Service
                 throw new ArgumentException("Password must be at least 8 characters long");
             }
 
-            if (!IsValidPhoneNumber(student.PhoneParent))
+            if (!IsValidPhoneNumber(student.ParentPhone))
             {
                 throw new ArgumentException("Phone number must be 10 digits");
             }

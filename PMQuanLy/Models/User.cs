@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PMQuanLy.Models
 {
@@ -15,4 +16,5 @@ namespace PMQuanLy.Models
         public string Address { get; set; }
         public string Role { get; set; }
     }
+
 }
