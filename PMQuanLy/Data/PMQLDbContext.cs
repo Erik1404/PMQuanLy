@@ -9,7 +9,7 @@ namespace PMQuanLy.Data
         {
 
         }
-       /* public DbSet<User> Users { get; set; }*/
+        /* public DbSet<User> Users { get; set; }*/
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseRegistration> CourseRegistrations { get; set; }
@@ -17,8 +17,5 @@ namespace PMQuanLy.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Tuition> Tuitions { get; set; }
         public DbSet<Report> Reports { get; set; }
-
-        public DbSet<User> Users { get; set; }
-
     }
 }

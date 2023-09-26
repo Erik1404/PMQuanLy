@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PMQuanLy.Data;
+﻿using PMQuanLy.Data;
 using PMQuanLy.Models;
-using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace PMQuanLy.Service
 {
-    // Attention : go to Program.cs, Add builder to use Service
     public class StudentService : IStudentService
     {
         private readonly PMQLDbContext _dbContext;
@@ -14,12 +13,6 @@ namespace PMQuanLy.Service
         {
             _dbContext = dbContext;
         }
-
-        public async Task<List<Student>> GetAllStudents()
-        {
-            return await _dbContext.Students.ToListAsync();
-        }
-
 
         //Login and Register for Student
         public Student LoginForStudent(string email, string password)
@@ -52,6 +45,7 @@ namespace PMQuanLy.Service
                 Address = newStudent.Address,
                 ParentPhone = newStudent.ParentPhone,
                 ParentName = newStudent.ParentName,
+                Avatar = newStudent.Avatar,
                 Role = "Student", // Đặt vai trò là "Student"
             };
 
@@ -74,41 +68,6 @@ namespace PMQuanLy.Service
             _dbContext.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
             return newStd;
         }
-
-       
-/*        //ADD STUDENT START
-        public async Task<Student> AddStudent(Student student)
-        {
-            if (!IsValidEmail(student.Email))
-            {
-                throw new ArgumentException("Email không hợp lệ");
-            }
-
-            if (!IsValidPassword(student.Password))
-            {
-                throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
-            }
-
-            if (!IsValidPhoneNumber(student.ParentPhone))
-            {
-                throw new ArgumentException("Số điện thoại cần 10 số");
-            }
-
-            _dbContext.Students.Add(student);
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-                return student;
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-        }
-
-        //ADD STUDENT END*/
-
 
         //Delete Student
         public async Task<bool> DeleteStudent(int studentId)
@@ -154,8 +113,6 @@ namespace PMQuanLy.Service
                 throw;
             }
         }
-
-
         // Check Form Email , Password and Phone
         private bool IsValidPhoneNumber(int phoneNumber)
         {

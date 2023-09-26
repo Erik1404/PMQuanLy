@@ -18,36 +18,44 @@ namespace PMQuanLy.Controllers
         {
             _studentService = studentService;
         }
-        [HttpGet]
-        public async Task<ActionResult<List<Student>>> GetAllStudents()
+
+        /* [HttpGet]
+         public async Task<ActionResult<List<Student>>> GetAllStudents()
+         {
+             var students = await _studentService.GetAllStudents();
+             return Ok(students);
+         }*/
+
+
+        [HttpPost("login/student")]
+        public IActionResult LoginStd(string Email, string Password)
         {
-            var students = await _studentService.GetAllStudents();
-            return Ok(students);
+            // Thực hiện xác minh danh tính với Email và Password
+            var std = _studentService.LoginForStudent(Email, Password);
+
+            if (std == null)
+            {
+                return BadRequest(new { message = "Email hoặc mật khẩu không chính xác." });
+            }
+            // Đăng nhập thành công
+            string welcomeMessage = "Xin chào " + std.FirstName +" "+ std.LastName;
+
+            return Ok(new { message = "Đăng nhập thành công\r\n" + welcomeMessage });
         }
-/*
-        [HttpGet("{id}")]
-        public IActionResult GetStudentById(int id)
+
+        [HttpPost("register/Std")]
+        public IActionResult Register([FromBody] Student newStd)
         {
-            var student = _studentService.GetStudentById(id);
-            if (student == null)
+            var registeredUser = _studentService.RegisterForStudent(newStd);
+
+            if (registeredUser == null)
             {
-                return NotFound();
+                return BadRequest(new { message = "Email đã tồn tại." });
             }
-            return Ok(student);
-        }*/
-        [HttpPost]
-        public async Task<ActionResult<Student>> AddStudent(Student student)
-        {
-            var addedStudent = await _studentService.AddStudent(student);
-            if (addedStudent != null)
-            {
-                return Ok(new { message = "Add success", student = addedStudent });
-            }
-            else
-            {
-                return BadRequest(new { message = "Add failed" });
-            }
+
+            return Ok(registeredUser);
         }
+
 
         [HttpDelete("{studentId}")]
         public async Task<ActionResult> DeleteStudent(int studentId)
