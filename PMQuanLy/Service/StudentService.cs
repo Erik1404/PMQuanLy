@@ -1,10 +1,11 @@
-﻿using PMQuanLy.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PMQuanLy.Data;
 using PMQuanLy.Models;
-using Microsoft.EntityFrameworkCore;
-
+using System.Text.RegularExpressions;
 
 namespace PMQuanLy.Service
 {
+    // Attention : go to Program.cs, Add builder to use Service
     public class StudentService : IStudentService
     {
         private readonly PMQLDbContext _dbContext;
@@ -14,93 +15,87 @@ namespace PMQuanLy.Service
             _dbContext = dbContext;
         }
 
-        //Login and Register for Student
-        public Student LoginForStudent(string email, string password)
+        public async Task<List<Student>> GetAllStudents()
         {
-            var student = _dbContext.Students.SingleOrDefault(u => u.Email == email && u.Password == password);
+            // Lấy tất cả các User có vai trò (Role) là "Student" 
+            var students = await _dbContext.Users
+                .Where(u => u.Role == "Student")
+                .ToListAsync();
 
-            if (student == null)
-                return null;
+            // Chuyển danh sách User thành danh sách Student
+            var studentList = students.Select(u => new Student
+            {
+                Email = u.Email,
+                Password = "No Check this",
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                DateOfBirth = u.DateOfBirth,
+                Gender = u.Gender,
+                Address = u.Address,
+                Role = u.Role,
+                ParentName = u.ParentName, // Thêm các trường dữ liệu cần thiết
+                ParentPhone = u.ParentPhone,
+                Avatar = u.Avatar,
+            }).ToList();
 
-            return student;
+            return studentList;
         }
 
-        public Student RegisterForStudent(Student newStudent)
-        {
-            // Kiểm tra xem email đã tồn tại chưa
-            if (_dbContext.Students.Any(u => u.Email == newStudent.Email))
-            {
-                return null; // Hoặc thực hiện xử lý lỗi nếu cần
-            }
 
-            // Tạo một đối tượng User từ dữ liệu của Student
-            var newStd = new Student
-            {
-                Email = newStudent.Email,
-                Password = newStudent.Password,
-                FirstName = newStudent.FirstName,
-                LastName = newStudent.LastName,
-                DateOfBirth = newStudent.DateOfBirth,
-                Gender = newStudent.Gender,
-                Address = newStudent.Address,
-                ParentPhone = newStudent.ParentPhone,
-                ParentName = newStudent.ParentName,
-                Avatar = newStudent.Avatar,
-                Role = "Student", // Đặt vai trò là "Student"
-            };
 
-            if (!IsValidEmail(newStd.Email))
-            {
-                throw new ArgumentException("Email không hợp lệ");
-            }
 
-            if (!IsValidPassword(newStd.Password))
-            {
-                throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
-            }
-
-            if (!IsValidPhoneNumber(newStd.ParentPhone))
-            {
-                throw new ArgumentException("Số điện thoại cần 10 số");
-            }
-
-            _dbContext.Students.Add(newStd);
-            _dbContext.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
-            return newStd;
-        }
 
         //Delete Student
-        public async Task<bool> DeleteStudent(int studentId)
+        public async Task<bool> DeleteStudent(int userId)
         {
-            var student = await _dbContext.Students.FindAsync(studentId);
-            if (student == null)
-                return false;
-            _dbContext.Students.Remove(student);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            // Tìm kiếm người dùng với UserId cụ thể
+            var student = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            // Kiểm tra xem người dùng tồn tại và có vai trò là "Student" không
+            if (student != null && student.Role == "Student")
+            { 
+                    _dbContext.Users.Remove(student);
+                    await _dbContext.SaveChangesAsync();
+                    return true;             
+            }
+
+            return false;
         }
 
 
         // Update Student
         public async Task<bool> UpdateStudent(Student student)
         {
-            // Kiểm tra các ràng buộc trước khi cập nhật
-            if (!IsValidEmail(student.Email))
+            // Kiểm tra xem sinh viên có tồn tại không
+            var existingStudent = await _dbContext.Students.SingleOrDefaultAsync(s => s.UserId == student.UserId);
+
+            if (existingStudent == null)
             {
-                throw new ArgumentException("Invalid email address");
+                throw new ArgumentException("Sinh viên không tồn tại.");
             }
 
-            if (!IsValidPassword(student.Password))
+            // Kiểm tra và cập nhật các trường thông tin cần thiết
+            if (!string.IsNullOrEmpty(student.Email))
             {
-                throw new ArgumentException("Password must be at least 8 characters long");
+                existingStudent.Email = student.Email;
             }
 
-            if (!IsValidPhoneNumber(student.ParentPhone))
+            if (!string.IsNullOrEmpty(student.Password))
             {
-                throw new ArgumentException("Phone number must be 10 digits");
+                existingStudent.Password = student.Password;
             }
 
-            _dbContext.Entry(student).State = EntityState.Modified;
+            if (!string.IsNullOrEmpty(student.FirstName))
+            {
+                existingStudent.FirstName = student.FirstName;
+            }
+
+            if (!string.IsNullOrEmpty(student.LastName))
+            {
+                existingStudent.LastName = student.LastName;
+            }
+
+            // Tiếp tục kiểm tra và cập nhật các trường thông tin khác
 
             try
             {
@@ -109,10 +104,12 @@ namespace PMQuanLy.Service
             }
             catch (DbUpdateException)
             {
-
                 throw;
             }
         }
+
+
+
         // Check Form Email , Password and Phone
         private bool IsValidPhoneNumber(int phoneNumber)
         {

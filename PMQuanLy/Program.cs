@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
 using PMQuanLy.Service;
-
+/*using PMQuanLy.Service;
+*/
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStudentService, StudentService>(); // Add this to use service
 builder.Services.AddSwaggerGen();
 

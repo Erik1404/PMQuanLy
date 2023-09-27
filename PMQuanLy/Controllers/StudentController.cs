@@ -19,43 +19,25 @@ namespace PMQuanLy.Controllers
             _studentService = studentService;
         }
 
-        /* [HttpGet]
-         public async Task<ActionResult<List<Student>>> GetAllStudents()
-         {
-             var students = await _studentService.GetAllStudents();
-             return Ok(students);
-         }*/
 
-
-        [HttpPost("login/student")]
-        public IActionResult LoginStd(string Email, string Password)
+        [HttpGet]
+        public async Task<ActionResult<List<Student>>> GetAllStudents()
         {
-            // Thực hiện xác minh danh tính với Email và Password
-            var std = _studentService.LoginForStudent(Email, Password);
-
-            if (std == null)
-            {
-                return BadRequest(new { message = "Email hoặc mật khẩu không chính xác." });
-            }
-            // Đăng nhập thành công
-            string welcomeMessage = "Xin chào " + std.FirstName +" "+ std.LastName;
-
-            return Ok(new { message = "Đăng nhập thành công\r\n" + welcomeMessage });
+            var students = await _studentService.GetAllStudents();
+            return Ok(students);
         }
-
-        [HttpPost("register/Std")]
-        public IActionResult Register([FromBody] Student newStd)
+/*
+        [HttpGet("{id}")]
+        public IActionResult GetStudentById(int id)
         {
-            var registeredUser = _studentService.RegisterForStudent(newStd);
-
-            if (registeredUser == null)
+            var student = _studentService.GetStudentById(id);
+            if (student == null)
             {
-                return BadRequest(new { message = "Email đã tồn tại." });
+                return NotFound();
             }
-
-            return Ok(registeredUser);
-        }
-
+            return Ok(student);
+        }*/
+       
 
         [HttpDelete("{studentId}")]
         public async Task<ActionResult> DeleteStudent(int studentId)
@@ -71,21 +53,37 @@ namespace PMQuanLy.Controllers
             }
         }
 
-        [HttpPut("{studentId}")]
-        public async Task<ActionResult> UpdateStudent(int studentId, [FromBody] Student student)
+        [HttpPut("update/{userId}")]
+        public async Task<ActionResult> UpdateStudent(int userId, [FromBody] Student student)
         {
-            if (studentId != student.StudentId)
-                return BadRequest(new { message = "Data something wrong" });
-
-            var updated = await _studentService.UpdateStudent(student);
-            if (updated)
+            // Kiểm tra xem userId có trùng khớp với student.UserId không
+            if (userId != student.UserId)
             {
-                return Ok(new { message = "Update information success" });
+                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
             }
-            else
+
+            try
             {
-                return NotFound(new { message = "Not found Student" });
+                var updated = await _studentService.UpdateStudent(student);
+
+                if (updated)
+                {
+                    return Ok(new { message = "Cập nhật thông tin thành công" });
+                }
+                else
+                {
+                    return NotFound(new { message = "Không tìm thấy thông tin sinh viên" });
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
             }
         }
+
     }
 }
