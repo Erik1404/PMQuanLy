@@ -67,7 +67,7 @@ namespace PMQuanLy.Controllers
             }
             catch (DbUpdateException)
             {
-                return BadRequest(new { message = "Có lỗi xảy ra" });
+                return BadRequest(new { message = "Có lỗi xảy ra " });
             }
         }
     }
