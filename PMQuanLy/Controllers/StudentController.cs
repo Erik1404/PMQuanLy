@@ -26,18 +26,6 @@ namespace PMQuanLy.Controllers
             var students = await _studentService.GetAllStudents();
             return Ok(students);
         }
-/*
-        [HttpGet("{id}")]
-        public IActionResult GetStudentById(int id)
-        {
-            var student = _studentService.GetStudentById(id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-            return Ok(student);
-        }*/
-       
 
         [HttpDelete("{studentId}")]
         public async Task<ActionResult> DeleteStudent(int studentId)
@@ -53,7 +41,7 @@ namespace PMQuanLy.Controllers
             }
         }
 
-        [HttpPut("update/{userId}")]
+        [HttpPut("update/{studentId}")]
         public async Task<ActionResult> UpdateStudent(int userId, [FromBody] Student student)
         {
             // Kiểm tra xem userId có trùng khớp với student.UserId không
