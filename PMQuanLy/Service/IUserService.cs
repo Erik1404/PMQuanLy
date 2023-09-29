@@ -6,7 +6,8 @@ namespace PMQuanLy.Service
     {
         User Login(string email, string password);
         User Register(User newRegister);
-        User RegisterForStudent (User newRegisterStd);
+        Student RegisterForStudent (Student newRegisterStd);
+        Teacher RegisterForTeacher(Teacher newRegisterTch);
         string CheckRoleUser(string email);
     }
 }

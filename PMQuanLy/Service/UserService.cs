@@ -51,7 +51,7 @@ namespace PMQuanLy.Service
             return newUser;
         }
 
-        public User RegisterForStudent(User newStudent)
+        public Student RegisterForStudent(Student newStudent)
         {
             // Kiểm tra xem email đã tồn tại chưa
             if (_dbContext.Students.Any(u => u.Email == newStudent.Email))
@@ -60,7 +60,7 @@ namespace PMQuanLy.Service
             }
 
             // Tạo một đối tượng User từ dữ liệu của Student
-            var newStd = new User
+            var newStd = new Student
             {
                 Email = newStudent.Email,
                 Password = newStudent.Password, // Sử dụng mật khẩu truyền vào từ client
@@ -94,6 +94,49 @@ namespace PMQuanLy.Service
         }
 
 
+        public Teacher RegisterForTeacher(Teacher newTeacher)
+        {
+            // Kiểm tra xem email đã tồn tại chưa
+            if (_dbContext.Teachers.Any(u => u.Email == newTeacher.Email))
+            {
+                return null; // Hoặc thực hiện xử lý lỗi nếu cần
+            }
+
+            // Tạo một đối tượng User từ dữ liệu của Teacher
+            var newStd = new Teacher
+            {
+                Email = newTeacher.Email,
+                Password = newTeacher.Password, // Sử dụng mật khẩu truyền vào từ client
+                FirstName = newTeacher.FirstName,
+                LastName = newTeacher.LastName,
+                DateOfBirth = newTeacher.DateOfBirth,
+                Gender = newTeacher.Gender,
+                Address = newTeacher.Address,
+                Role = "Teacher", // Đặt vai trò là "Student"
+                CooperationDay = newTeacher.CooperationDay,
+                IdentityCard = newTeacher.IdentityCard,
+                PhoneNumber = newTeacher.PhoneNumber,
+                Subject = newTeacher.Subject,
+                Avatar = newTeacher.Avatar,
+            };
+            if (!IsValidEmail(newStd.Email))
+            {
+                throw new ArgumentException("Email không hợp lệ");
+            }
+
+            if (!IsValidPassword(newStd.Password))
+            {
+                throw new ArgumentException("Mật khẩu cần ít nhất 8 ký tự");
+            }
+
+            if (!IsValidPhoneNumber(newStd.PhoneNumber))
+            {
+                throw new ArgumentException("Số điện thoại cần 10 số");
+            }
+            _dbContext.Users.Add(newStd);
+            _dbContext.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+            return newStd;
+        }
 
         public string CheckRoleUser(string role)
         {

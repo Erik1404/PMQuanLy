@@ -16,8 +16,11 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+//add this to use Service
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IStudentService, StudentService>(); // Add this to use service
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+
 builder.Services.AddSwaggerGen();
 
 

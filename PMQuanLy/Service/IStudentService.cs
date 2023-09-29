@@ -10,8 +10,5 @@ namespace PMQuanLy.Service
         Task<bool> UpdateStudent(Student student);
 
 
-
-
-
     }
 }

@@ -66,7 +66,7 @@ namespace PMQuanLy.Controllers
 
 
         [HttpPost("register/student")]
-        public IActionResult RegisterForStudent([FromBody] User newStudent)
+        public IActionResult RegisterForStudent([FromBody] Student newStudent)
         {
             var registeredStudent = _userService.RegisterForStudent(newStudent);
 
@@ -78,7 +78,18 @@ namespace PMQuanLy.Controllers
             return Ok(registeredStudent);
         }
 
+        [HttpPost("register/teacher")]
+        public IActionResult RegisterForTeacher([FromBody] Teacher newTeacher)
+        { 
+            var registeredTeacher = _userService.RegisterForTeacher(newTeacher);
 
+            if (registeredTeacher == null)
+            {
+                return BadRequest(new { message = "Email đã tồn tại." });
+            }
+
+            return Ok(registeredTeacher);
+        }
 
         [HttpGet("user-action")]
         public IActionResult UserAction()
