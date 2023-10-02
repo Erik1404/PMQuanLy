@@ -32,7 +32,6 @@ namespace PMQuanLy.Service
                 Role = u.Role,
                 CooperationDay=u.CooperationDay,
                 IdentityCard=u.IdentityCard,
-                Subject = u.Subject,
                 Avatar = u.Avatar,
             }).ToList();
 

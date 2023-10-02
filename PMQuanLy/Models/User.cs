@@ -18,14 +18,5 @@ namespace PMQuanLy.Models
         public string Avatar { get; set; }
 
 
-       /* //Student
-        public int ParentPhone { get; set; }
-        public string ParentName { get; set; }
-
-        //Teacher
-        public int IdentityCard { get; set; }
-        public int PhoneNumber { get; set; }
-        public DateTime CooperationDay { get; set; } // Ngày hợp tác
-        public string Subject { get; set; }*/
     }
 }

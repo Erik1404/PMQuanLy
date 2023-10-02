@@ -30,16 +30,24 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassroomId"));
 
-                    b.Property<string>("ClassDesc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ClassName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<string>("Class_Desc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolDay")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TimeClass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClassroomId");
 
@@ -275,7 +283,7 @@ namespace PMQuanLy.Migrations
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("int");
 
                     b.HasIndex("SubjectId");
@@ -285,24 +293,16 @@ namespace PMQuanLy.Migrations
 
             modelBuilder.Entity("PMQuanLy.Models.Classroom", b =>
                 {
-                    b.HasOne("PMQuanLy.Models.Subject", "Subject")
+                    b.HasOne("PMQuanLy.Models.Subject", null)
                         .WithMany("Classrooms")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subject");
+                        .HasForeignKey("SubjectId");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Teacher", b =>
                 {
-                    b.HasOne("PMQuanLy.Models.Subject", "Subject")
+                    b.HasOne("PMQuanLy.Models.Subject", null)
                         .WithMany("Teachers")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subject");
+                        .HasForeignKey("SubjectId");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>

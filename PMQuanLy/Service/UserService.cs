@@ -116,8 +116,9 @@ namespace PMQuanLy.Service
                 CooperationDay = newTeacher.CooperationDay,
                 IdentityCard = newTeacher.IdentityCard,
                 PhoneNumber = newTeacher.PhoneNumber,
-                Subject = newTeacher.Subject,
                 Avatar = newTeacher.Avatar,
+               
+                
             };
             if (!IsValidEmail(newStd.Email))
             {

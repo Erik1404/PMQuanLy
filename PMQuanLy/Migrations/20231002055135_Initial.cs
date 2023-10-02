@@ -110,8 +110,10 @@ namespace PMQuanLy.Migrations
                     ClassroomId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClassName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClassDesc = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false)
+                    Class_Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SchoolDay = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,8 +122,7 @@ namespace PMQuanLy.Migrations
                         name: "FK_Classrooms_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "SubjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SubjectId");
                 });
 
             migrationBuilder.CreateTable(
@@ -154,8 +155,7 @@ namespace PMQuanLy.Migrations
                         name: "FK_Users_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "SubjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SubjectId");
                 });
 
             migrationBuilder.CreateIndex(
