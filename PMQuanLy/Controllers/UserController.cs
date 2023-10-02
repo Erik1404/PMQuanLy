@@ -45,11 +45,7 @@ namespace PMQuanLy.Controllers
             return Ok(response);
         }
 
-
-
-
-
-
+/*
         [HttpPost("register")]
         public IActionResult Register([FromBody] User newUser)
         {
@@ -61,7 +57,7 @@ namespace PMQuanLy.Controllers
             }
 
             return Ok(registeredUser);
-        }
+        }*/
 
 
 

@@ -18,6 +18,8 @@ namespace PMQuanLy.Data
         public DbSet<Tuition> Tuitions { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+
 
     }
 }

@@ -5,6 +5,9 @@
         public int IdentityCard { get; set; }
         public int PhoneNumber { get; set; }
         public DateTime CooperationDay { get; set; } // Ngày hợp tác
-        public string Subject { get; set; }
+
+        /// Khóa ngoại để liên kết với Subject (Môn học)
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; }
     }
 }
