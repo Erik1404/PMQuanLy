@@ -34,7 +34,7 @@ namespace PMQuanLy.Controllers
         }
 
 
-        [HttpPost("api/AddSubject")]
+        [HttpPost("api/AddSubject")] 
         public async Task<ActionResult<Subject>> AddSubject(Subject subject)
         {
             var addsubject = await _subjectService.AddSubject(subject);
