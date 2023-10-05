@@ -12,7 +12,7 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20231002055135_Initial")]
+    [Migration("20231005033014_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,12 @@ namespace PMQuanLy.Migrations
                     b.Property<string>("Class_Desc")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PriceSubject")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityStudent")
+                        .HasColumnType("int");
 
                     b.Property<string>("SchoolDay")
                         .IsRequired()

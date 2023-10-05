@@ -7,48 +7,48 @@ namespace PMQuanLy.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SubjectController : ControllerBase
+    public class ScheduleController : ControllerBase
     {
-        private readonly ISubjectService _subjectService;
+        private readonly IScheduleService _ScheduleService;
 
-        public SubjectController(SubjectService subjectService)
+        public ScheduleController(ScheduleService ScheduleService)
         {
-            _subjectService = subjectService;
+            _ScheduleService = ScheduleService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Subject>>> GetAllSubjects()
+        public async Task<ActionResult<List<Schedule>>> GetAllSchedules()
         {
-            var subjects = await _subjectService.GetAllSubjects();
-            return Ok(subjects);
+            var Schedules = await _ScheduleService.GetAllSchedules();
+            return Ok(Schedules);
         }
 
-        [HttpDelete("{subjectId}")]
-        public async Task<ActionResult> DeleteSubject(int subjectId)
+        [HttpDelete("{ScheduleId}")]
+        public async Task<ActionResult> DeleteStudent(int ScheduleId)
         {
-            var deleted = await _subjectService.DeleteSubject(subjectId);
+            var deleted = await _ScheduleService.DeleteSchedule(ScheduleId);
             if (deleted)
             {
                 return Ok(new { message = "Delete success" });
             }
             else
             {
-                return NotFound(new { message = "Not found subject" });
+                return NotFound(new { message = "Not found Schedule" });
             }
         }
 
-        [HttpPut("update/{subjectId}")]
-        public async Task<ActionResult> UpdateSubject(int subjectId, [FromBody] Subject subject)
+        [HttpPut("update/{ScheduleId}")]
+        public async Task<ActionResult> UpdateStudent(int ScheduleId, [FromBody] Schedule Schedule)
         {
-            if (subjectId != subject.SubjectId)
+            if (ScheduleId != Schedule.ScheduleId)
             {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
             }
 
             try
             {
-                var updated = await _subjectService.DeleteSubject(subjectId);
+                var updated = await _ScheduleService.DeleteSchedule(ScheduleId);
 
                 if (updated)
                 {

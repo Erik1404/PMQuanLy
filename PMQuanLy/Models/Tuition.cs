@@ -4,6 +4,7 @@ namespace PMQuanLy.Models
 {
     public class Tuition
     {
+        // Khai báo trường Học Phí
         [Key]
         public int TuitionId { get; set; }
         public int StudentId { get; set; }
@@ -11,4 +12,6 @@ namespace PMQuanLy.Models
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
     }
+
+
 }

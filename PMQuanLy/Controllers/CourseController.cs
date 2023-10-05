@@ -7,48 +7,48 @@ namespace PMQuanLy.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SubjectController : ControllerBase
+    public class CourseController : ControllerBase
     {
-        private readonly ISubjectService _subjectService;
+        private readonly ICourseService _CourseService;
 
-        public SubjectController(SubjectService subjectService)
+        public CourseController(CourseService CourseService)
         {
-            _subjectService = subjectService;
+            _CourseService = CourseService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Subject>>> GetAllSubjects()
+        public async Task<ActionResult<List<Course>>> GetAllCourses()
         {
-            var subjects = await _subjectService.GetAllSubjects();
-            return Ok(subjects);
+            var Courses = await _CourseService.GetAllCourses();
+            return Ok(Courses);
         }
 
-        [HttpDelete("{subjectId}")]
-        public async Task<ActionResult> DeleteSubject(int subjectId)
+        [HttpDelete("{CourseId}")]
+        public async Task<ActionResult> DeleteStudent(int CourseId)
         {
-            var deleted = await _subjectService.DeleteSubject(subjectId);
+            var deleted = await _CourseService.DeleteCourse(CourseId);
             if (deleted)
             {
                 return Ok(new { message = "Delete success" });
             }
             else
             {
-                return NotFound(new { message = "Not found subject" });
+                return NotFound(new { message = "Not found Course" });
             }
         }
 
-        [HttpPut("update/{subjectId}")]
-        public async Task<ActionResult> UpdateSubject(int subjectId, [FromBody] Subject subject)
+        [HttpPut("update/{CourseId}")]
+        public async Task<ActionResult> UpdateStudent(int CourseId, [FromBody] Course Course)
         {
-            if (subjectId != subject.SubjectId)
+            if (CourseId != Course.CourseId)
             {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
             }
 
             try
             {
-                var updated = await _subjectService.DeleteSubject(subjectId);
+                var updated = await _CourseService.DeleteCourse(CourseId);
 
                 if (updated)
                 {

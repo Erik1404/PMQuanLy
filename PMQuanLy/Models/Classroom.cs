@@ -9,6 +9,8 @@
         public string SchoolDay { get; set; }
 
         public string TimeClass { get; set; }
+        public int QuantityStudent { get; set; }
+        public int PriceSubject { get; set; }
 
     }
 }

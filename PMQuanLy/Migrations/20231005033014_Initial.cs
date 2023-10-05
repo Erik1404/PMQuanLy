@@ -113,6 +113,8 @@ namespace PMQuanLy.Migrations
                     Class_Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SchoolDay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuantityStudent = table.Column<int>(type: "int", nullable: false),
+                    PriceSubject = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

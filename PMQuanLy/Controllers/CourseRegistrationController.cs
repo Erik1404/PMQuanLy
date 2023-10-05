@@ -7,48 +7,48 @@ namespace PMQuanLy.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SubjectController : ControllerBase
+    public class CourseRegistrationController : ControllerBase
     {
-        private readonly ISubjectService _subjectService;
+        private readonly ICourseRegistrationService _CourseRegistrationService;
 
-        public SubjectController(SubjectService subjectService)
+        public CourseRegistrationController(CourseRegistrationService CourseRegistrationService)
         {
-            _subjectService = subjectService;
+            _CourseRegistrationService = CourseRegistrationService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Subject>>> GetAllSubjects()
+        public async Task<ActionResult<List<CourseRegistration>>> GetAllCourseRegistrations()
         {
-            var subjects = await _subjectService.GetAllSubjects();
-            return Ok(subjects);
+            var CourseRegistrations = await _CourseRegistrationService.GetAllCourseRegistrations();
+            return Ok(CourseRegistrations);
         }
 
-        [HttpDelete("{subjectId}")]
-        public async Task<ActionResult> DeleteSubject(int subjectId)
+        [HttpDelete("{CourseRegistrationId}")]
+        public async Task<ActionResult> DeleteStudent(int CourseRegistrationId)
         {
-            var deleted = await _subjectService.DeleteSubject(subjectId);
+            var deleted = await _CourseRegistrationService.DeleteCourseRegistration(CourseRegistrationId);
             if (deleted)
             {
                 return Ok(new { message = "Delete success" });
             }
             else
             {
-                return NotFound(new { message = "Not found subject" });
+                return NotFound(new { message = "Not found CourseRegistration" });
             }
         }
 
-        [HttpPut("update/{subjectId}")]
-        public async Task<ActionResult> UpdateSubject(int subjectId, [FromBody] Subject subject)
+        [HttpPut("update/{CourseRegistrationId}")]
+        public async Task<ActionResult> UpdateStudent(int CourseRegistrationId, [FromBody] CourseRegistration CourseRegistration)
         {
-            if (subjectId != subject.SubjectId)
+            if (CourseRegistrationId != CourseRegistration.RegistrationId)
             {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
             }
 
             try
             {
-                var updated = await _subjectService.DeleteSubject(subjectId);
+                var updated = await _CourseRegistrationService.DeleteCourseRegistration(CourseRegistrationId);
 
                 if (updated)
                 {

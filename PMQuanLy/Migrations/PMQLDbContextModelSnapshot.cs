@@ -38,6 +38,12 @@ namespace PMQuanLy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PriceSubject")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityStudent")
+                        .HasColumnType("int");
+
                     b.Property<string>("SchoolDay")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

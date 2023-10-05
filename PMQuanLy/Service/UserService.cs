@@ -26,7 +26,7 @@ namespace PMQuanLy.Service
 
             return user;
         }
-       /* public User Register(User newRegister)
+        public User Register(User newRegister)
         {
             // Kiểm tra xem email đã tồn tại chưa
             if (_dbContext.Users.Any(u => u.Email == newRegister.Email))
@@ -49,7 +49,7 @@ namespace PMQuanLy.Service
             _dbContext.Users.Add(newUser);
             _dbContext.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
             return newUser;
-        }*/
+        }
 
         public Student RegisterForStudent(Student newStudent)
         {
@@ -116,9 +116,8 @@ namespace PMQuanLy.Service
                 CooperationDay = newTeacher.CooperationDay,
                 IdentityCard = newTeacher.IdentityCard,
                 PhoneNumber = newTeacher.PhoneNumber,
-                Avatar = newTeacher.Avatar,
-               
-                
+/*                Subject = newTeacher.Subject,
+*/                Avatar = newTeacher.Avatar,
             };
             if (!IsValidEmail(newStd.Email))
             {
