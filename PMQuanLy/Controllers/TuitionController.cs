@@ -25,7 +25,7 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpDelete("{TuitionId}")]
-        public async Task<ActionResult> DeleteStudent(int TuitionId)
+        public async Task<ActionResult> DeleteTuition(int TuitionId)
         {
             var deleted = await _TuitionService.DeleteTuition(TuitionId);
             if (deleted)
@@ -39,7 +39,7 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpPut("update/{TuitionId}")]
-        public async Task<ActionResult> UpdateStudent(int TuitionId, [FromBody] Tuition Tuition)
+        public async Task<ActionResult> UpdateTuition(int TuitionId, [FromBody] Tuition Tuition)
         {
             if (TuitionId != Tuition.TuitionId)
             {

@@ -24,6 +24,30 @@ namespace PMQuanLy.Controllers
             return Ok(subjects);
         }
 
+
+        //Search - Get with Name
+        [HttpGet("api/SearchSubject")]
+        public IActionResult SearchSubject(string keyword)
+        {
+            var subjects = _subjectService.SearchSubjects(keyword);
+            return Ok(subjects);
+        }
+
+
+        [HttpPost("api/AddSubject")]
+        public async Task<ActionResult<Subject>> AddSubject(Subject subject)
+        {
+            var addsubject = await _subjectService.AddSubject(subject);
+            if (addsubject != null)
+            {
+                return Ok(new { message = "Thêm môn học mới thành công", subject = addsubject });
+            }
+            else
+            {
+                return BadRequest(new { message = "Có lỗi" });
+            }
+        }
+
         [HttpDelete("{subjectId}")]
         public async Task<ActionResult> DeleteSubject(int subjectId)
         {

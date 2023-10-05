@@ -25,7 +25,7 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpDelete("{CourseId}")]
-        public async Task<ActionResult> DeleteStudent(int CourseId)
+        public async Task<ActionResult> DeleteCourse(int CourseId)
         {
             var deleted = await _CourseService.DeleteCourse(CourseId);
             if (deleted)
