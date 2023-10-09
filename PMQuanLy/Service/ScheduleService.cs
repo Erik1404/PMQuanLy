@@ -42,5 +42,21 @@ namespace PMQuanLy.Service
             return true;
         }
 
+        public async Task<int> CountCourseInTeacherId(int TeacherId)
+        {
+            var count = _dbContext.Schedules.Where(x => x.TeacherId == TeacherId).Count();
+            return count;
+        }
+
+        public async Task<List<Course>> ListCourseInTeacher(int TeacherId)
+        {
+            var q = from a in _dbContext.Schedules
+                    join b in _dbContext.Courses
+                    on a.CourseId equals b.CourseId
+                    where a.TeacherId == TeacherId
+                    select b;
+            return await q.ToListAsync();
+        }
+
     }
 }

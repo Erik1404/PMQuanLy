@@ -16,9 +16,8 @@ namespace PMQuanLy.Models
         public int PriceSubject { get; set; }
 
 
-        public int SubjectId { get; set; }
-        public Subject Subject { get; set; }
-        public List<TeacherCourse> TeacherCourses { get; set; }
-
+      
+/*        public List<TeacherCourse> TeacherCourses { get; set; }
+*/
     }
 }

@@ -68,5 +68,12 @@ namespace PMQuanLy.Controllers
                 return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
             }
         }
+
+        [HttpGet("{StudentId}")]
+        public async Task<ActionResult> TotalAmount(int StudentId)
+        {
+            var total = await _TuitionService.ToTalTuitionInStudent(StudentId);
+            return Ok(total);
+        }
     }
 }

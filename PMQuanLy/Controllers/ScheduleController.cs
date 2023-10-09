@@ -24,7 +24,7 @@ namespace PMQuanLy.Controllers
             return Ok(Schedules);
         }
 
-        [HttpDelete("{ScheduleId}")]
+        [HttpDelete("deleteSchedule/{ScheduleId}")]
         public async Task<ActionResult> DeleteSchedule(int ScheduleId)
         {
             var deleted = await _ScheduleService.DeleteSchedule(ScheduleId);
@@ -67,6 +67,21 @@ namespace PMQuanLy.Controllers
             {
                 return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
             }
+        }
+
+
+        [HttpGet("Count/{TeacherId}")]
+        public async Task<ActionResult> CountCourseInTeacherId(int TeacherId)
+        {
+            var count = await _ScheduleService.CountCourseInTeacherId(TeacherId);
+            return Ok(count);
+        }
+
+        [HttpGet("GetList/{TeacherId}")]
+        public async Task<ActionResult> ListCourseInTeacher(int TeacherId)
+        {
+            var course = await _ScheduleService.ListCourseInTeacher(TeacherId);
+            return Ok(course);
         }
     }
 }

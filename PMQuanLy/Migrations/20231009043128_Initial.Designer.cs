@@ -12,7 +12,7 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20231007035227_Initial")]
+    [Migration("20231009043128_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -51,7 +51,7 @@ namespace PMQuanLy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("TimeClass")
@@ -299,25 +299,21 @@ namespace PMQuanLy.Migrations
 
             modelBuilder.Entity("PMQuanLy.Models.Course", b =>
                 {
-                    b.HasOne("PMQuanLy.Models.Subject", "Subject")
+                    b.HasOne("PMQuanLy.Models.Subject", null)
                         .WithMany("Courses")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subject");
+                        .HasForeignKey("SubjectId");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.TeacherCourse", b =>
                 {
                     b.HasOne("PMQuanLy.Models.Course", "Course")
-                        .WithMany("TeacherCourses")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PMQuanLy.Models.Teacher", "Teacher")
-                        .WithMany("TeacherCourses")
+                        .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -327,19 +323,9 @@ namespace PMQuanLy.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("PMQuanLy.Models.Course", b =>
-                {
-                    b.Navigation("TeacherCourses");
-                });
-
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("PMQuanLy.Models.Teacher", b =>
-                {
-                    b.Navigation("TeacherCourses");
                 });
 #pragma warning restore 612, 618
         }

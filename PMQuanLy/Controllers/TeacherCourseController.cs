@@ -163,12 +163,5 @@ namespace PMQuanLy.Controllers
                 return StatusCode(500, new { message = "Lỗi trong quá trình xóa khóa học khỏi danh sách khóa học của giáo viên" });
             }
         }
-        
-
-
-
-
-
-
     }
 }

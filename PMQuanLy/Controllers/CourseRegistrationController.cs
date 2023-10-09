@@ -68,5 +68,34 @@ namespace PMQuanLy.Controllers
                 return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
             }
         }
+
+
+        // Đếm số lượng mở lớp
+
+        [HttpGet("CountStudent/{CourseId}")]
+        public async Task<ActionResult> CountStudentInCourse(int CourseId)
+        {
+            var count = await _CourseRegistrationService.CountStudentInCourse(CourseId);
+            return Ok(count);
+        }
+
+        // danh sách học sinh trong lớp
+
+        [HttpGet("GetList/{CourseId}")]
+        public async Task<ActionResult> ListStudentInCourse(int CourseId)
+        {
+            var students = await _CourseRegistrationService.ListStudentInCourse(CourseId);
+            return Ok(students);
+        }
+        
+
+
+        // Tìm học sinh >> học sinh đang học lớp gì
+        [HttpGet("{StudentId}")]
+        public async Task<ActionResult> FindCoureByStudentId(int StudentId)
+        {
+            var course = await _CourseRegistrationService.FindCoureByStudentId(StudentId);
+            return Ok(course);
+        }
     }
 }

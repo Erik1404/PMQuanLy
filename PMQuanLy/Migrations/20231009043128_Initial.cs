@@ -128,7 +128,7 @@ namespace PMQuanLy.Migrations
                     TimeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuantityStudent = table.Column<int>(type: "int", nullable: false),
                     PriceSubject = table.Column<int>(type: "int", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false)
+                    SubjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,8 +137,7 @@ namespace PMQuanLy.Migrations
                         name: "FK_Courses_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "SubjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SubjectId");
                 });
 
             migrationBuilder.CreateTable(

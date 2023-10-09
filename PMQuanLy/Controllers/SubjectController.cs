@@ -34,26 +34,16 @@ namespace PMQuanLy.Controllers
         }
 
 
-        [HttpPost("api/AddSubject")]
-        public async Task<ActionResult<Subject>> AddSubject(Subject subject)
+        [HttpPost]
+        public async Task<IActionResult> AddSubject([FromBody] Subject subject)
         {
-            var addsubject = await _subjectService.AddSubject(subject);
-            if (addsubject != null)
+            if (subject == null)
             {
-                
-                var newsubject = new
-                {
-                    subjectId = addsubject.SubjectId,
-                    subjectName = addsubject.SubjectName,
-                    subjectDesc = addsubject.SubjectDesc,
-                };
+                return BadRequest();
+            }
 
-                return Ok(new { message = "Thêm môn học mới thành công", subject = newsubject });
-            }
-            else
-            {
-                return BadRequest(new { message = "Có lỗi" });
-            }
+            var addedSubject = await _subjectService.AddSubject(subject);
+            return CreatedAtAction(nameof(SearchSubject), new { id = addedSubject.SubjectId }, addedSubject);
         }
 
 

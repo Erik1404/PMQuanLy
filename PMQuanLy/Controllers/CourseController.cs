@@ -25,7 +25,7 @@ namespace PMQuanLy.Controllers
         }
 
 
-        [HttpPost("api/AddCourse")]
+        [HttpPost("AddCourse")]
         public async Task<ActionResult<Course>> AddCourse(Course course)
         {
             var addcourse = await _CourseService.AddCourse(course);
