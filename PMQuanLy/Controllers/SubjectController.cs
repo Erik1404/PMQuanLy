@@ -1,94 +1,78 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PMQuanLy.Models;
 using PMQuanLy.Service;
 
 namespace PMQuanLy.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class SubjectController : ControllerBase
     {
         private readonly ISubjectService _subjectService;
-
-        public SubjectController(SubjectService subjectService)
+        public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
 
 
-        [HttpGet]
+        [HttpGet("All Subjects")]
         public async Task<ActionResult<List<Subject>>> GetAllSubjects()
         {
             var subjects = await _subjectService.GetAllSubjects();
             return Ok(subjects);
         }
 
-
-        //Search - Get with Name
-        [HttpGet("api/SearchSubject")]
-        public IActionResult SearchSubject(string keyword)
+        [HttpGet("Search Subject")]
+        public IActionResult SearchSubjects(string keyword)
         {
-            var subjects = _subjectService.SearchSubjects(keyword);
+            var subjects = _subjectService.SearchSubject(keyword);
             return Ok(subjects);
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> AddSubject([FromBody] Subject subject)
+        [HttpPost("Add Subject")]
+        public async Task<ActionResult<Subject>> AddSubject(Subject subject)
         {
-            if (subject == null)
+            var add = await _subjectService.AddSubject(subject);
+            if (add != null)
             {
-                return BadRequest();
+                return Ok(new { message = "Thêm môn thành công", subject = add });
             }
-
-            var addedSubject = await _subjectService.AddSubject(subject);
-            return CreatedAtAction(nameof(SearchSubject), new { id = addedSubject.SubjectId }, addedSubject);
+            else
+            {
+                return BadRequest(new { message = "Thêm môn thất bại" });
+            }
         }
 
-
-        [HttpDelete("{subjectId}")]
+        [HttpDelete("Delete Subject")]
         public async Task<ActionResult> DeleteSubject(int subjectId)
         {
             var deleted = await _subjectService.DeleteSubject(subjectId);
             if (deleted)
             {
-                return Ok(new { message = "Delete success" });
+                return Ok(new { message = "Xóa môn thành công" });
             }
             else
             {
-                return NotFound(new { message = "Not found subject" });
+                return NotFound(new { message = "Không tìm thấy môn" });
             }
         }
 
-        [HttpPut("update/{subjectId}")]
-        public async Task<ActionResult> UpdateSubject(int subjectId, [FromBody] Subject subject)
+
+        [HttpPut("Update Subject")]
+        public async Task<ActionResult> UpdateSubject(int subjectId, Subject subject)
         {
             if (subjectId != subject.SubjectId)
-            {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
-            }
 
-            try
+            var updated = await _subjectService.UpdateSubject(subject);
+            if (updated)
             {
-                var updated = await _subjectService.DeleteSubject(subjectId);
-
-                if (updated)
-                {
-                    return Ok(new { message = "Cập nhật thông tin thành công" });
-                }
-                else
-                {
-                    return NotFound(new { message = "Không tìm thấy thông tin môn học" });
-                }
+                return Ok(new { message = "Cập nhật môn thành công" });
             }
-            catch (ArgumentException ex)
+            else
             {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (DbUpdateException)
-            {
-                return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
+                return NotFound(new { message = "Không tìm thấy môn" });
             }
         }
     }

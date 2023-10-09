@@ -5,9 +5,10 @@ namespace PMQuanLy.Service
     public interface ISubjectService
     {
         Task<List<Subject>> GetAllSubjects();
-        List<Subject> SearchSubjects(string keyword);
+        List<Subject> SearchSubject(string keyword);
         Task<Subject> AddSubject(Subject subject);
         Task<bool> DeleteSubject(int SubjectId);
-        Task<bool> UpdateSubject(Subject subject);       
+        Task<bool> UpdateSubject(Subject subject);
+        
     }
 }

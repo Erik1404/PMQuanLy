@@ -5,9 +5,9 @@ namespace PMQuanLy.Service
     public interface ICourseService
     {
         Task<List<Course>> GetAllCourses();
-        List<Course> SearchCourses(string keyword);
+        List<Course> SearchCourse(string keyword);
         Task<Course> AddCourse(Course Course);
         Task<bool> DeleteCourse(int CourseId);
-        Task<bool> UpdateCourse(Course Course);       
+        Task<bool> UpdateCourse(Course Course);
     }
 }

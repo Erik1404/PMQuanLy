@@ -1,86 +1,78 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PMQuanLy.Models;
 using PMQuanLy.Service;
 
 namespace PMQuanLy.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _CourseService;
-
-        public CourseController(CourseService CourseService)
+        public CourseController(ICourseService CourseService)
         {
             _CourseService = CourseService;
         }
 
 
-        [HttpGet]
+        [HttpGet("All Courses")]
         public async Task<ActionResult<List<Course>>> GetAllCourses()
         {
             var Courses = await _CourseService.GetAllCourses();
             return Ok(Courses);
         }
 
-
-        [HttpPost("AddCourse")]
-        public async Task<ActionResult<Course>> AddCourse(Course course)
+        [HttpGet("Search Course")]
+        public IActionResult SearchCourses(string keyword)
         {
-            var addcourse = await _CourseService.AddCourse(course);
-            if (addcourse != null)
+            var Courses = _CourseService.SearchCourse(keyword);
+            return Ok(Courses);
+        }
+
+        [HttpPost("Add Course")]
+        public async Task<ActionResult<Course>> AddCourse(Course Course)
+        {
+            var add = await _CourseService.AddCourse(Course);
+            if (add != null)
             {
-                return Ok(new { message = "Thêm môn học mới thành công", course = addcourse });
+                return Ok(new { message = "Thêm môn thành công", Course = add });
             }
             else
             {
-                return BadRequest(new { message = "Có lỗi" });
+                return BadRequest(new { message = "Thêm môn thất bại" });
             }
         }
 
-        [HttpDelete("{CourseId}")]
+        [HttpDelete("Delete Course")]
         public async Task<ActionResult> DeleteCourse(int CourseId)
         {
             var deleted = await _CourseService.DeleteCourse(CourseId);
             if (deleted)
             {
-                return Ok(new { message = "Delete success" });
+                return Ok(new { message = "Xóa môn thành công" });
             }
             else
             {
-                return NotFound(new { message = "Not found Course" });
+                return NotFound(new { message = "Không tìm thấy môn" });
             }
         }
 
-        [HttpPut("update/{CourseId}")]
-        public async Task<ActionResult> UpdateCourse(int CourseId, [FromBody] Course Course)
+
+        [HttpPut("Update Course")]
+        public async Task<ActionResult> UpdateCourse(int CourseId, Course Course)
         {
             if (CourseId != Course.CourseId)
-            {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
-            }
 
-            try
+            var updated = await _CourseService.UpdateCourse(Course);
+            if (updated)
             {
-                var updated = await _CourseService.DeleteCourse(CourseId);
-
-                if (updated)
-                {
-                    return Ok(new { message = "Cập nhật thông tin thành công" });
-                }
-                else
-                {
-                    return NotFound(new { message = "Không tìm thấy thông tin môn học" });
-                }
+                return Ok(new { message = "Cập nhật môn thành công" });
             }
-            catch (ArgumentException ex)
+            else
             {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (DbUpdateException)
-            {
-                return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
+                return NotFound(new { message = "Không tìm thấy môn" });
             }
         }
     }

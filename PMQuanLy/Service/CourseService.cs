@@ -17,7 +17,16 @@ namespace PMQuanLy.Service
         {
             return await _dbContext.Courses.ToListAsync();
         }
-        
+
+        public List<Course> SearchCourse(string keyword)
+        {
+
+            return _dbContext.Courses
+                .Where(s =>
+                    s.CourseId.ToString().Contains(keyword) ||
+                    s.CourseName.Contains(keyword))
+                .ToList();
+        }
         public async Task<Course> AddCourse(Course Course)
         {
             _dbContext.Courses.Add(Course);
@@ -41,15 +50,5 @@ namespace PMQuanLy.Service
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        public List<Course> SearchCourses(string keyword)
-        {
-
-            return _dbContext.Courses
-                .Where(s =>
-                    s.CourseId.ToString().Contains(keyword) ||
-                    s.CourseName.Contains(keyword))
-                .ToList();
-        }
-
     }
 }

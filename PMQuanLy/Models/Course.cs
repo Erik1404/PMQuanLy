@@ -13,11 +13,7 @@ namespace PMQuanLy.Models
 
         public string TimeClass { get; set; }
         public int QuantityStudent { get; set; }
-        public int PriceSubject { get; set; }
-
-
-      
-/*        public List<TeacherCourse> TeacherCourses { get; set; }
-*/
+        public int PriceCourse { get; set; }
+        public int SubjectId { get; set; }
     }
 }

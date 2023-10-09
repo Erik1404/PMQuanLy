@@ -12,7 +12,7 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20231009043128_Initial")]
+    [Migration("20231009061032_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,7 +41,7 @@ namespace PMQuanLy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PriceSubject")
+                    b.Property<int>("PriceCourse")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantityStudent")
@@ -150,11 +150,11 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectId"));
 
-                    b.Property<string>("SubjectDesc")
+                    b.Property<string>("Subject_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubjectName")
+                    b.Property<string>("Subject_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

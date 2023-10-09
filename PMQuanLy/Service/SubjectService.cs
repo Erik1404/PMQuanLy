@@ -17,7 +17,16 @@ namespace PMQuanLy.Service
         {
             return await _dbContext.Subjects.ToListAsync();
         }
-        
+
+        public List<Subject> SearchSubject(string keyword)
+        {
+
+            return _dbContext.Subjects
+                .Where(s =>
+                    s.SubjectId.ToString().Contains(keyword) ||
+                    s.Subject_Name.Contains(keyword))
+                .ToList();
+        }
         public async Task<Subject> AddSubject(Subject subject)
         {
             _dbContext.Subjects.Add(subject);
@@ -41,15 +50,5 @@ namespace PMQuanLy.Service
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        public List<Subject> SearchSubjects(string keyword)
-        {
-
-            return _dbContext.Subjects
-                .Where(s =>
-                    s.SubjectId.ToString().Contains(keyword) ||
-                    s.SubjectName.Contains(keyword))
-                .ToList();
-        }
-
     }
 }

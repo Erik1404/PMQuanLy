@@ -24,6 +24,20 @@ namespace PMQuanLy.Controllers
             return Ok(CourseRegistrations);
         }
 
+        [HttpPost("Add Course")]
+        public async Task<ActionResult<Course>> AddCourseRegistration(Course Course)
+        {
+            var add = await _CourseService.AddCourse(Course);
+            if (add != null)
+            {
+                return Ok(new { message = "Thêm môn thành công", Course = add });
+            }
+            else
+            {
+                return BadRequest(new { message = "Thêm môn thất bại" });
+            }
+        }
+
         [HttpDelete("{CourseRegistrationId}")]
         public async Task<ActionResult> DeleteCourseRegistration(int CourseRegistrationId)
         {

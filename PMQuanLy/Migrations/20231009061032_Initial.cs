@@ -65,8 +65,8 @@ namespace PMQuanLy.Migrations
                 {
                     SubjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SubjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubjectDesc = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Subject_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject_Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,7 +127,7 @@ namespace PMQuanLy.Migrations
                     SchoolDay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuantityStudent = table.Column<int>(type: "int", nullable: false),
-                    PriceSubject = table.Column<int>(type: "int", nullable: false),
+                    PriceCourse = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
