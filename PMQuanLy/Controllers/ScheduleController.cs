@@ -70,5 +70,20 @@ namespace PMQuanLy.Controllers
                 return NotFound(new { message = "Không tìm thấy" });
             }
         }
+
+
+        [HttpGet("Count/{TeacherId}")]
+        public async Task<ActionResult> CountCourseInTeacherId(int TeacherId)
+        {
+            var count = await _ScheduleService.CountCourseInTeacherId(TeacherId);
+            return Ok(count);
+        }
+
+        [HttpGet("ListCourseTeacherBySchedule/{TeacherId}")]
+        public async Task<ActionResult> ListCourseInTeacher(int TeacherId)
+        {
+            var course = await _ScheduleService.ListCourseInTeacher(TeacherId);
+            return Ok(course);
+        }
     }
 }

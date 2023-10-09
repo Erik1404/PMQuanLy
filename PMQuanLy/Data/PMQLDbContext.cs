@@ -22,6 +22,7 @@ namespace PMQuanLy.Data
 
 
         public DbSet<TeacherCourse> TeacherCourses { get; set; }
+       
 
 
     }
