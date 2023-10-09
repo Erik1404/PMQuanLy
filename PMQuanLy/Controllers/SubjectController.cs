@@ -34,19 +34,28 @@ namespace PMQuanLy.Controllers
         }
 
 
-        [HttpPost("api/AddSubject")] 
+        [HttpPost("api/AddSubject")]
         public async Task<ActionResult<Subject>> AddSubject(Subject subject)
         {
             var addsubject = await _subjectService.AddSubject(subject);
             if (addsubject != null)
             {
-                return Ok(new { message = "Thêm môn học mới thành công", subject = addsubject });
+                
+                var newsubject = new
+                {
+                    subjectId = addsubject.SubjectId,
+                    subjectName = addsubject.SubjectName,
+                    subjectDesc = addsubject.SubjectDesc,
+                };
+
+                return Ok(new { message = "Thêm môn học mới thành công", subject = newsubject });
             }
             else
             {
                 return BadRequest(new { message = "Có lỗi" });
             }
         }
+
 
         [HttpDelete("{subjectId}")]
         public async Task<ActionResult> DeleteSubject(int subjectId)

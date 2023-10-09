@@ -2,12 +2,12 @@
 
 namespace PMQuanLy.Service
 {
-    public interface ICourseService
+    public interface ISubjectService
     {
-        Task<List<Course>> GetAllCourses();
-        List<Course> SearchCourses(string keyword);
-        Task<Course> AddCourse(Course Course);
-        Task<bool> DeleteCourse(int CourseId);
-        Task<bool> UpdateCourse(Course Course);       
+        Task<List<Subject>> GetAllSubjects();
+        List<Subject> SearchSubjects(string keyword);
+        Task<Subject> AddSubject(Subject subject);
+        Task<bool> DeleteSubject(int SubjectId);
+        Task<bool> UpdateSubject(Subject subject);       
     }
 }

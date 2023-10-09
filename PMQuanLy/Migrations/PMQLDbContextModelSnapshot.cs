@@ -22,46 +22,6 @@ namespace PMQuanLy.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PMQuanLy.Models.Classroom", b =>
-                {
-                    b.Property<int>("ClassroomId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassroomId"));
-
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Class_Desc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PriceSubject")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityStudent")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SchoolDay")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TimeClass")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClassroomId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Classrooms");
-                });
-
             modelBuilder.Entity("PMQuanLy.Models.Course", b =>
                 {
                     b.Property<int>("CourseId")
@@ -78,7 +38,26 @@ namespace PMQuanLy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PriceSubject")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityStudent")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SchoolDay")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeClass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CourseId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Courses");
                 });
@@ -179,6 +158,29 @@ namespace PMQuanLy.Migrations
                     b.HasKey("SubjectId");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.TeacherCourse", b =>
+                {
+                    b.Property<int>("TeacherCourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherCourseId"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeacherCourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("TeacherCourses");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Tuition", b =>
@@ -289,33 +291,52 @@ namespace PMQuanLy.Migrations
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("SubjectId");
-
                     b.HasDiscriminator().HasValue("Teacher");
                 });
 
-            modelBuilder.Entity("PMQuanLy.Models.Classroom", b =>
+            modelBuilder.Entity("PMQuanLy.Models.Course", b =>
                 {
-                    b.HasOne("PMQuanLy.Models.Subject", null)
-                        .WithMany("Classrooms")
-                        .HasForeignKey("SubjectId");
+                    b.HasOne("PMQuanLy.Models.Subject", "Subject")
+                        .WithMany("Courses")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("PMQuanLy.Models.Teacher", b =>
+            modelBuilder.Entity("PMQuanLy.Models.TeacherCourse", b =>
                 {
-                    b.HasOne("PMQuanLy.Models.Subject", null)
-                        .WithMany("Teachers")
-                        .HasForeignKey("SubjectId");
+                    b.HasOne("PMQuanLy.Models.Course", "Course")
+                        .WithMany("TeacherCourses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PMQuanLy.Models.Teacher", "Teacher")
+                        .WithMany("TeacherCourses")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.Course", b =>
+                {
+                    b.Navigation("TeacherCourses");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
                 {
-                    b.Navigation("Classrooms");
+                    b.Navigation("Courses");
+                });
 
-                    b.Navigation("Teachers");
+            modelBuilder.Entity("PMQuanLy.Models.Teacher", b =>
+                {
+                    b.Navigation("TeacherCourses");
                 });
 #pragma warning restore 612, 618
         }

@@ -24,6 +24,21 @@ namespace PMQuanLy.Controllers
             return Ok(Courses);
         }
 
+
+        [HttpPost("api/AddCourse")]
+        public async Task<ActionResult<Course>> AddCourse(Course course)
+        {
+            var addcourse = await _CourseService.AddCourse(course);
+            if (addcourse != null)
+            {
+                return Ok(new { message = "Thêm môn học mới thành công", course = addcourse });
+            }
+            else
+            {
+                return BadRequest(new { message = "Có lỗi" });
+            }
+        }
+
         [HttpDelete("{CourseId}")]
         public async Task<ActionResult> DeleteCourse(int CourseId)
         {
@@ -39,7 +54,7 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpPut("update/{CourseId}")]
-        public async Task<ActionResult> UpdateStudent(int CourseId, [FromBody] Course Course)
+        public async Task<ActionResult> UpdateCourse(int CourseId, [FromBody] Course Course)
         {
             if (CourseId != Course.CourseId)
             {
