@@ -18,6 +18,7 @@ namespace PMQuanLy.Service
             return await _dbContext.CourseRegistrations.ToListAsync();
         }
 
+
         public async Task<CourseRegistration> AddCourseRegistration(CourseRegistration CourseRegistration)
         {
             _dbContext.CourseRegistrations.Add(CourseRegistration);
@@ -41,28 +42,5 @@ namespace PMQuanLy.Service
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
-        public async Task<int> CountStudentInCourse(int CourseId)
-        {
-            var count = _dbContext.CourseRegistrations.Where(x => x.CourseId == CourseId).Count();
-            return count;
-        }
-
-        public async Task<List<Student>> ListStudentInCourse(int CourseId)
-        {
-            var q = from a in _dbContext.CourseRegistrations
-                    join b in _dbContext.Students
-                    on a.StudentId equals b.UserId
-                    where a.CourseId == CourseId
-                    select b;
-            return await q.ToListAsync();
-        }
-        public async Task<Course> FindCoureByStudentId(int StudentId)
-        {
-            var courses = await _dbContext.CourseRegistrations.Where(x => x.StudentId == StudentId).FirstOrDefaultAsync();
-            var course = await _dbContext.Courses.Where(x=> x.CourseId == courses.CourseId).FirstOrDefaultAsync();
-            return course;
-        }
-
     }
 }

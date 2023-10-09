@@ -18,6 +18,7 @@ namespace PMQuanLy.Service
             return await _dbContext.Tuitions.ToListAsync();
         }
 
+     
         public async Task<Tuition> AddTuition(Tuition Tuition)
         {
             _dbContext.Tuitions.Add(Tuition);
@@ -41,6 +42,7 @@ namespace PMQuanLy.Service
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
         public async Task<decimal> ToTalTuitionInStudent(int StudentId)
         {
             var total = _dbContext.Tuitions.Where(x => x.StudentId == StudentId).ToList().Sum(x => x.Amount);

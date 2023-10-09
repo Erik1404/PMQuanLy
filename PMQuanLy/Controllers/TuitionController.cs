@@ -1,79 +1,74 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PMQuanLy.Models;
 using PMQuanLy.Service;
 
 namespace PMQuanLy.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class TuitionController : ControllerBase
     {
         private readonly ITuitionService _TuitionService;
-
-        public TuitionController(TuitionService TuitionService)
+        public TuitionController(ITuitionService TuitionService)
         {
             _TuitionService = TuitionService;
         }
 
 
-        [HttpGet]
+        [HttpGet("All Tuitions")]
         public async Task<ActionResult<List<Tuition>>> GetAllTuitions()
         {
             var Tuitions = await _TuitionService.GetAllTuitions();
             return Ok(Tuitions);
         }
 
-        [HttpDelete("{TuitionId}")]
+
+
+        [HttpPost("Add Tuition")]
+        public async Task<ActionResult<Tuition>> AddTuition(Tuition Tuition)
+        {
+            var add = await _TuitionService.AddTuition(Tuition);
+            if (add != null)
+            {
+                return Ok(new { message = "Thêm thành công", Tuition = add });
+            }
+            else
+            {
+                return BadRequest(new { message = "Thêm  thất bại" });
+            }
+        }
+
+        [HttpDelete("Delete Tuition")]
         public async Task<ActionResult> DeleteTuition(int TuitionId)
         {
             var deleted = await _TuitionService.DeleteTuition(TuitionId);
             if (deleted)
             {
-                return Ok(new { message = "Delete success" });
+                return Ok(new { message = "Xóa thành công" });
             }
             else
             {
-                return NotFound(new { message = "Not found Tuition" });
+                return NotFound(new { message = "Không tìm thấy" });
             }
         }
 
-        [HttpPut("update/{TuitionId}")]
-        public async Task<ActionResult> UpdateTuition(int TuitionId, [FromBody] Tuition Tuition)
+
+        [HttpPut("Update Tuition")]
+        public async Task<ActionResult> UpdateTuition(int TuitionId, Tuition Tuition)
         {
             if (TuitionId != Tuition.TuitionId)
-            {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
-            }
 
-            try
+            var updated = await _TuitionService.UpdateTuition(Tuition);
+            if (updated)
             {
-                var updated = await _TuitionService.DeleteTuition(TuitionId);
-
-                if (updated)
-                {
-                    return Ok(new { message = "Cập nhật thông tin thành công" });
-                }
-                else
-                {
-                    return NotFound(new { message = "Không tìm thấy thông tin môn học" });
-                }
+                return Ok(new { message = "Cập nhật thành công" });
             }
-            catch (ArgumentException ex)
+            else
             {
-                return BadRequest(new { message = ex.Message });
+                return NotFound(new { message = "Không tìm thấy" });
             }
-            catch (DbUpdateException)
-            {
-                return BadRequest(new { message = "Có lỗi xảy ra khi cập nhật thông tin" });
-            }
-        }
-
-        [HttpGet("{StudentId}")]
-        public async Task<ActionResult> TotalAmount(int StudentId)
-        {
-            var total = await _TuitionService.ToTalTuitionInStudent(StudentId);
-            return Ok(total);
         }
     }
 }

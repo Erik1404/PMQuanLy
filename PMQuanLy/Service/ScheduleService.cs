@@ -17,7 +17,8 @@ namespace PMQuanLy.Service
         {
             return await _dbContext.Schedules.ToListAsync();
         }
-        
+
+
         public async Task<Schedule> AddSchedule(Schedule Schedule)
         {
             _dbContext.Schedules.Add(Schedule);
@@ -42,6 +43,8 @@ namespace PMQuanLy.Service
             return true;
         }
 
+
+
         public async Task<int> CountCourseInTeacherId(int TeacherId)
         {
             var count = _dbContext.Schedules.Where(x => x.TeacherId == TeacherId).Count();
@@ -57,6 +60,5 @@ namespace PMQuanLy.Service
                     select b;
             return await q.ToListAsync();
         }
-
     }
 }
