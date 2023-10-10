@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMQuanLy.Models;
 using PMQuanLy.Service;
@@ -9,66 +10,83 @@ namespace PMQuanLy.Controllers
     [ApiController]
     public class CourseRegistrationController : ControllerBase
     {
-        private readonly ICourseRegistrationService _CourseRegistrationService;
-        public CourseRegistrationController(ICourseRegistrationService CourseRegistrationService)
+        private readonly ICourseRegistrationService _courseRegistrationService;
+
+        public CourseRegistrationController(ICourseRegistrationService courseRegistrationService)
         {
-            _CourseRegistrationService = CourseRegistrationService;
+            _courseRegistrationService = courseRegistrationService;
         }
 
 
-        [HttpGet("All CourseRegistrations")]
-        public async Task<ActionResult<List<CourseRegistration>>> GetAllCourseRegistrations()
+        [HttpGet]
+        public async Task<IActionResult> GetAllCourseRegistrations()
         {
-            var CourseRegistrations = await _CourseRegistrationService.GetAllCourseRegistrations();
-            return Ok(CourseRegistrations);
+            var courseRegistrations = await _courseRegistrationService.GetAllCourseRegistrations();
+            return Ok(courseRegistrations);
         }
 
-       
-
-        [HttpPost("Add CourseRegistration")]
-        public async Task<ActionResult<CourseRegistration>> AddCourseRegistration(CourseRegistration CourseRegistration)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCourseRegistrationById(int id)
         {
-            var add = await _CourseRegistrationService.AddCourseRegistration(CourseRegistration);
-            if (add != null)
+            var courseRegistration = await _courseRegistrationService.GetCourseRegistrationById(id);
+
+            if (courseRegistration == null)
             {
-                return Ok(new { message = "Thêm  thành công", CourseRegistration = add });
+                return NotFound();
             }
-            else
-            {
-                return BadRequest(new { message = "Thêm thất bại" });
-            }
+
+            return Ok(courseRegistration);
         }
 
-        [HttpDelete("Delete CourseRegistration")]
-        public async Task<ActionResult> DeleteCourseRegistration(int CourseRegistrationId)
+        [HttpPost]
+        [Route("RegisterStudentForCourse")]
+        public async Task<IActionResult> RegisterStudentForCourse(int studentId, int courseId)
         {
-            var deleted = await _CourseRegistrationService.DeleteCourseRegistration(CourseRegistrationId);
-            if (deleted)
+            var registration = await _courseRegistrationService.RegisterStudentForCourse(studentId, courseId);
+
+            if (registration == null)
             {
-                return Ok(new { message = "Xóa thành công" });
+                return BadRequest(new { message = "Đăng ký không thành công" });
             }
-            else
+
+            return Ok(new { message = "Đăng ký thành công", registration });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> UnregisterStudentFromCourse(int id)
+        {
+            var success = await _courseRegistrationService.UnregisterStudentFromCourse(id);
+
+            if (success)
             {
-                return NotFound(new { message = "Không tìm thấy dữ liệu" });
+                return Ok(new { message = "Xóa đăng ký thành công" });
             }
+
+            return NotFound(new { message = "Không tìm thấy đăng ký hoặc xóa không thành công" });
         }
 
 
-        [HttpPut("Update CourseRegistration")]
-        public async Task<ActionResult> UpdateCourseRegistration(int CourseRegistrationId, CourseRegistration CourseRegistration)
+        [HttpGet("GetCourseRegistrationsForStudent/{studentId}")]
+        public async Task<IActionResult> GetCourseRegistrationsForStudent(int studentId)
         {
-            if (CourseRegistrationId != CourseRegistration.CourseRegistrationId)
-                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
-
-            var updated = await _CourseRegistrationService.UpdateCourseRegistration(CourseRegistration);
-            if (updated)
-            {
-                return Ok(new { message = "Cập nhật thành công" });
-            }
-            else
-            {
-                return NotFound(new { message = "Không tìm thấy dữ liệu" });
-            }
+            var courseRegistrations = await _courseRegistrationService.GetCourseRegistrationsForStudent(studentId);
+            return Ok(courseRegistrations);
         }
+
+        [HttpGet("GetCourseRegistrationsForCourse/{courseId}")]
+        public async Task<IActionResult> GetCourseRegistrationsForCourse(int courseId)
+        {
+            var courseRegistrations = await _courseRegistrationService.GetCourseRegistrationsForCourse(courseId);
+            return Ok(courseRegistrations);
+        }
+
+
+        [HttpGet("Count Student/{CourseId}")]
+        public async Task<ActionResult> CountStudentInCourse(int CourseId)
+        {
+            var count = await _courseRegistrationService.CountStudentInCourse(CourseId);
+            return Ok(count);
+        }
+
     }
 }

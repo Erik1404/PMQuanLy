@@ -29,6 +29,19 @@ namespace PMQuanLy.Service
         }
         public async Task<Course> AddCourse(Course Course)
         {
+            // Tạo một đối tượng User từ dữ liệu của Student
+            var newCourse = new Course
+            {
+                CourseName = Course.CourseName,
+                Description = Course.Description,
+                MinimumStudents = Course.MinimumStudents,
+                MaximumStudents = Course.MaximumStudents,
+                SchoolDay = Course.SchoolDay,
+                TimeClass = Course.TimeClass,
+                PriceCourse = Course.PriceCourse,
+                CourseStatus = CourseStatus.Open, // Đặt vai trò là "Student"
+               
+            };
             _dbContext.Courses.Add(Course);
             await _dbContext.SaveChangesAsync();
             return Course;

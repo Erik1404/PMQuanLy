@@ -12,8 +12,21 @@ namespace PMQuanLy.Models
         public string SchoolDay { get; set; }
 
         public string TimeClass { get; set; }
-        public int QuantityStudent { get; set; }
+      
         public int PriceCourse { get; set; }
+
+        public CourseStatus CourseStatus { get; set; }
+
+        public int MinimumStudents { get; set; }
+        public int MaximumStudents { get; set; }
+
         public int SubjectId { get; set; }
     }
+
+    public enum CourseStatus
+    {
+       Open,
+       Close,
+    }
+
 }

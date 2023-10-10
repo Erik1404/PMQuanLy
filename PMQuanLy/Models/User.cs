@@ -16,7 +16,6 @@ namespace PMQuanLy.Models
         public string Role { get; set; } // chia role Student - Teacher - Admin
        
         public string Avatar { get; set; }
-
-
     }
+
 }

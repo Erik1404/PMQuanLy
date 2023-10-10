@@ -138,6 +138,7 @@ namespace PMQuanLy.Service
             return newStd;
         }
 
+
         public string CheckRoleUser(string role)
         {
             if (role == "Student")

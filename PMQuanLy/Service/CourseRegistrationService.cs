@@ -13,34 +13,102 @@ namespace PMQuanLy.Service
             _dbContext = dbContext;
         }
 
+
         public async Task<List<CourseRegistration>> GetAllCourseRegistrations()
         {
             return await _dbContext.CourseRegistrations.ToListAsync();
         }
 
-
-        public async Task<CourseRegistration> AddCourseRegistration(CourseRegistration CourseRegistration)
+        public async Task<CourseRegistration> GetCourseRegistrationById(int courseRegistrationId)
         {
-            _dbContext.CourseRegistrations.Add(CourseRegistration);
-            await _dbContext.SaveChangesAsync();
-            return CourseRegistration;
+            return await _dbContext.CourseRegistrations.FindAsync(courseRegistrationId);
         }
 
-        public async Task<bool> DeleteCourseRegistration(int CourseRegistrationId)
+
+
+        public async Task<CourseRegistration> RegisterStudentForCourse(int studentId, int courseId)
         {
-            var CourseRegistration = await _dbContext.CourseRegistrations.FindAsync(CourseRegistrationId);
-            if (CourseRegistration == null)
+            var student = await _dbContext.Students.FindAsync(studentId);
+            var course = await _dbContext.Courses.FindAsync(courseId);
+
+            if (student == null || course == null)
+            {
+                return null; // Không tìm thấy học sinh hoặc khóa học
+            }
+
+            if (student.Role != "Student")
+            {
+                return null; // Người dùng không phải là học sinh
+            }
+
+            var existingRegistrations = await _dbContext.CourseRegistrations
+                .Where(cr => cr.CourseId == courseId)
+                .ToListAsync();
+
+            if (existingRegistrations.Count >= course.MaximumStudents)
+            {
+                course.CourseStatus = CourseStatus.Close;
+                _dbContext.Entry(course).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+            }
+
+            // Tạo bản ghi đăng ký khóa học
+            var registration = new CourseRegistration
+            {
+                StudentId = studentId,
+                CourseId = courseId,
+                RegistrationDate = DateTime.Now
+            };
+
+            _dbContext.CourseRegistrations.Add(registration);
+            await _dbContext.SaveChangesAsync();
+
+            // Kiểm tra xem đã đủ số lượng học sinh tối thiểu chưa
+            if (existingRegistrations.Count + 1 >= course.MinimumStudents)
+            {
+                course.CourseStatus = CourseStatus.Open;
+                _dbContext.Entry(course).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return registration;
+        }
+
+
+        public async Task<bool> UnregisterStudentFromCourse(int courseRegistrationId)
+        {
+            var courseRegistration = await _dbContext.CourseRegistrations.FindAsync(courseRegistrationId);
+
+            if (courseRegistration == null)
+            {
                 return false;
-            _dbContext.CourseRegistrations.Remove(CourseRegistration);
+            }
+
+            _dbContext.CourseRegistrations.Remove(courseRegistration);
             await _dbContext.SaveChangesAsync();
+
             return true;
         }
 
-        public async Task<bool> UpdateCourseRegistration(CourseRegistration CourseRegistration)
+        public async Task<List<CourseRegistration>> GetCourseRegistrationsForStudent(int studentId)
         {
-            _dbContext.Entry(CourseRegistration).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return true;
+            return await _dbContext.CourseRegistrations
+                .Where(cr => cr.Student.UserId == studentId)
+                .ToListAsync();
+        }
+
+        public async Task<List<CourseRegistration>> GetCourseRegistrationsForCourse(int courseId)
+        {
+            return await _dbContext.CourseRegistrations
+                .Where(cr => cr.CourseId == courseId)
+                .ToListAsync();
+        }
+
+
+        public async Task<int> CountStudentInCourse(int CourseId)
+        {
+            var count = _dbContext.CourseRegistrations.Where(x => x.CourseId == CourseId).Count();
+            return count;
         }
     }
 }
