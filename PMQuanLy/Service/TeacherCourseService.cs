@@ -18,7 +18,6 @@ namespace PMQuanLy.Service
         {
             try
             {
-                // Kiểm tra xem giáo viên và khóa học có tồn tại không
                 var teacher = await _dbContext.Teachers.FindAsync(teacherId);
                 var course = await _dbContext.Courses.FindAsync(courseId);
 
@@ -33,7 +32,6 @@ namespace PMQuanLy.Service
                     return false; // Giáo viên đã giảng dạy khóa học này rồi
                 }
 
-                // Tạo bản ghi trong bảng TeacherCourse
                 var teacherCourse = new TeacherCourse
                 {
                     TeacherId = teacherId,
@@ -47,7 +45,6 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
                 return false;
             }
         }
@@ -57,7 +54,6 @@ namespace PMQuanLy.Service
         {
             try
             {
-                // Kiểm tra xem khóa học và giáo viên có tồn tại không
                 var course = await _dbContext.Courses.FindAsync(courseId);
                 var teacher = await _dbContext.Teachers.FindAsync(teacherId);
 
@@ -72,7 +68,6 @@ namespace PMQuanLy.Service
                     return false; // Giáo viên đã được giao khóa học này rồi
                 }
 
-                // Tạo bản ghi trong bảng TeacherCourse
                 var teacherCourse = new TeacherCourse
                 {
                     TeacherId = teacherId,
@@ -108,7 +103,6 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
                 return null;
             }
         }
@@ -136,12 +130,11 @@ namespace PMQuanLy.Service
         {
             try
             {
-                // Lấy bản ghi trong bảng TeacherCourse để xóa
                 var teacherCourse = _dbContext.TeacherCourses.FirstOrDefault(tc => tc.Teacher.UserId == teacherId && tc.CourseId == courseId);
 
                 if (teacherCourse == null)
                 {
-                    return false; // Không tìm thấy bản ghi để xóa
+                    return false;
                 }
 
                 _dbContext.TeacherCourses.Remove(teacherCourse);
@@ -151,7 +144,6 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
                 return false;
             }
         }
@@ -160,13 +152,12 @@ namespace PMQuanLy.Service
         {
             try
             {
-                // Lấy bản ghi trong bảng TeacherCourse để xóa
                
                 var teacherCourse = _dbContext.TeacherCourses.FirstOrDefault(tc => tc.CourseId == courseId && tc.TeacherId == teacherId);
 
                 if (teacherCourse == null)
                 {
-                    return false; // Không tìm thấy bản ghi để xóa
+                    return false; 
                 }
 
                 _dbContext.TeacherCourses.Remove(teacherCourse);
@@ -176,7 +167,7 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
+
                 return false;
             }
         }

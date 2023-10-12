@@ -50,7 +50,6 @@ namespace PMQuanLy.Service
                 return null;
             }
 
-            // Tạo bản ghi đăng ký khóa học
             var registration = new CourseRegistration
             {
                 StudentId = studentId,
