@@ -5,11 +5,11 @@ namespace PMQuanLy.Service
     public interface ITuitionService
     {
         Task<List<Tuition>> GetAllTuitions();
-       
-        Task<Tuition> AddTuition(Tuition Tuition);
-        Task<bool> DeleteTuition(int TuitionId);
-        Task<bool> UpdateTuition(Tuition Tuition);
-
-        Task<decimal> ToTalTuitionInStudent(int StudentId);
+        Task<Tuition> GetTuitionById(int tuitionId);
+        Task<List<Tuition>> GetTuitionsByStudentId(int studentId);
+        Task<Tuition> AddTuition(Tuition tuition);
+        Task<bool> DeleteTuition(int tuitionId);
+        Task<bool> UpdateTuition(Tuition tuition);
+        Task<decimal> CalculateTotalTuitionForStudent(int studentId);
     }
 }

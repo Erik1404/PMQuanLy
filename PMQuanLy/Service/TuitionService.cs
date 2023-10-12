@@ -18,36 +18,63 @@ namespace PMQuanLy.Service
             return await _dbContext.Tuitions.ToListAsync();
         }
 
-     
-        public async Task<Tuition> AddTuition(Tuition Tuition)
+        public async Task<Tuition> GetTuitionById(int tuitionId)
         {
-            _dbContext.Tuitions.Add(Tuition);
-            await _dbContext.SaveChangesAsync();
-            return Tuition;
+            return await _dbContext.Tuitions.FindAsync(tuitionId);
         }
 
-        public async Task<bool> DeleteTuition(int TuitionId)
+        public async Task<List<Tuition>> GetTuitionsByStudentId(int studentId)
         {
-            var Tuition = await _dbContext.Tuitions.FindAsync(TuitionId);
-            if (Tuition == null)
+            return await _dbContext.Tuitions
+                .Where(t => t.StudentId == studentId)
+                .ToListAsync();
+        }
+
+        public async Task<Tuition> AddTuition(Tuition tuition)
+        {
+            _dbContext.Tuitions.Add(tuition);
+            await _dbContext.SaveChangesAsync();
+            return tuition;
+        }
+
+        public async Task<bool> DeleteTuition(int tuitionId)
+        {
+            var tuition = await _dbContext.Tuitions.FindAsync(tuitionId);
+            if (tuition == null)
+            {
                 return false;
-            _dbContext.Tuitions.Remove(Tuition);
+            }
+
+            _dbContext.Tuitions.Remove(tuition);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> UpdateTuition(Tuition Tuition)
+        public async Task<bool> UpdateTuition(Tuition tuition)
         {
-            _dbContext.Entry(Tuition).State = EntityState.Modified;
+            _dbContext.Entry(tuition).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<decimal> ToTalTuitionInStudent(int StudentId)
+        public async Task<decimal> CalculateTotalTuitionForStudent(int studentId)
         {
-            var total = _dbContext.Tuitions.Where(x => x.StudentId == StudentId).ToList().Sum(x => x.Amount);
-            return total;
+            // Lấy danh sách các khóa học đã đăng ký bởi học sinh
+            var courseRegistrations = await _dbContext.CourseRegistrations
+                .Include(cr => cr.Course)
+                .Where(cr => cr.StudentId == studentId)
+                .ToListAsync();
+
+            decimal totalTuition = 0;
+
+            foreach (var registration in courseRegistrations)
+            {
+                totalTuition += registration.Course.PriceCourse;
+            }
+
+            return totalTuition;
         }
+
 
     }
 }

@@ -6,7 +6,5 @@
         public int PhoneNumber { get; set; }
         public DateTime CooperationDay { get; set; } // Ngày hợp tác
 
-
-     
     }
 }

@@ -47,9 +47,7 @@ namespace PMQuanLy.Service
 
             if (existingRegistrations.Count >= course.MaximumStudents)
             {
-                course.CourseStatus = CourseStatus.Close;
-                _dbContext.Entry(course).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
+                return null;
             }
 
             // Tạo bản ghi đăng ký khóa học
@@ -66,8 +64,7 @@ namespace PMQuanLy.Service
             // Kiểm tra xem đã đủ số lượng học sinh tối thiểu chưa
             if (existingRegistrations.Count + 1 >= course.MinimumStudents)
             {
-                course.CourseStatus = CourseStatus.Open;
-                _dbContext.Entry(course).State = EntityState.Modified;
+                course.CourseStatus = CourseStatus.Close;
                 await _dbContext.SaveChangesAsync();
             }
 

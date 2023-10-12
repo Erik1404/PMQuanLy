@@ -14,7 +14,10 @@ namespace PMQuanLy.Service
         {
             _dbContext = dbContext;
         }
-
+        public async Task<Student> GetStudentById(int studentId)
+        {
+            return await _dbContext.Students.FindAsync(studentId);
+        }
         public async Task<List<Student>> GetAllStudents()
         {
             // Lấy tất cả các User có vai trò (Role) là "Student" 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PMQuanLy.Data;
 
@@ -11,9 +12,11 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    partial class PMQLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010093608_DataStudent")]
+    partial class DataStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,16 +88,11 @@ namespace PMQuanLy.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TuitionId")
-                        .HasColumnType("int");
-
                     b.HasKey("CourseRegistrationId");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("TuitionId");
 
                     b.ToTable("CourseRegistrations");
                 });
@@ -206,18 +204,19 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TuitionId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalTuition")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("TuitionId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Tuitions");
                 });
@@ -331,10 +330,6 @@ namespace PMQuanLy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PMQuanLy.Models.Tuition", null)
-                        .WithMany("CourseRegistrations")
-                        .HasForeignKey("TuitionId");
-
                     b.Navigation("Course");
 
                     b.Navigation("Student");
@@ -359,25 +354,9 @@ namespace PMQuanLy.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("PMQuanLy.Models.Tuition", b =>
-                {
-                    b.HasOne("PMQuanLy.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("PMQuanLy.Models.Tuition", b =>
-                {
-                    b.Navigation("CourseRegistrations");
                 });
 #pragma warning restore 612, 618
         }

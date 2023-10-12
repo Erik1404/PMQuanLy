@@ -18,6 +18,11 @@ namespace PMQuanLy.Service
             return await _dbContext.Courses.ToListAsync();
         }
 
+        public async Task<Course> GetCourseById(int courseId)
+        {
+            return await _dbContext.Courses.FindAsync(courseId);
+        }
+
         public List<Course> SearchCourse(string keyword)
         {
 

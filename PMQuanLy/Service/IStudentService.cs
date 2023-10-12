@@ -5,7 +5,7 @@ namespace PMQuanLy.Service
     public interface IStudentService
     {
         Task<List<Student>> GetAllStudents();
-        /*Task<Student> AddStudent(Student student);*/
+        Task<Student> GetStudentById(int studentId);
         Task<bool> DeleteStudent(int studentId);
         Task<bool> UpdateStudent(Student student);
 
