@@ -34,7 +34,7 @@ namespace PMQuanLy.Service
         }
         public async Task<Course> AddCourse(Course Course)
         {
-            // Tạo một đối tượng User từ dữ liệu của Student
+            
             var newCourse = new Course
             {
                 CourseName = Course.CourseName,
@@ -44,12 +44,12 @@ namespace PMQuanLy.Service
                 SchoolDay = Course.SchoolDay,
                 TimeClass = Course.TimeClass,
                 PriceCourse = Course.PriceCourse,
-                CourseStatus = CourseStatus.Open, // Đặt vai trò là "Student"
+                CourseStatus = CourseStatus.Open,
                
             };
-            _dbContext.Courses.Add(Course);
+            _dbContext.Courses.Add(newCourse);
             await _dbContext.SaveChangesAsync();
-            return Course;
+            return newCourse;
         }
 
         public async Task<bool> DeleteCourse(int CourseId)
