@@ -15,6 +15,8 @@ namespace PMQuanLy.Models
         public int CourseId { get; set; }
         public Course Course { get; set; }
 
+      
+
         // Thời gian đăng ký
         public DateTime RegistrationDate { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 
 namespace PMQuanLy.Service
@@ -45,6 +46,7 @@ namespace PMQuanLy.Service
                 TimeClass = Course.TimeClass,
                 PriceCourse = Course.PriceCourse,
                 CourseStatus = CourseStatus.Open,
+                SubjectId = Course.SubjectId,
                
             };
             _dbContext.Courses.Add(newCourse);

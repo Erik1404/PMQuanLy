@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 
 namespace PMQuanLy.Service
@@ -15,7 +16,9 @@ namespace PMQuanLy.Service
 
         public async Task<List<Subject>> GetAllSubjects()
         {
-            return await _dbContext.Subjects.ToListAsync();
+            return await _dbContext.Subjects
+               .Include(cy => cy.Courses)
+               .ToListAsync();
         }
 
         public List<Subject> SearchSubject(string keyword)

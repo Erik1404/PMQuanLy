@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 
 namespace PMQuanLy.Service
@@ -31,6 +32,7 @@ namespace PMQuanLy.Service
                 Address = u.Address,
                 Role = u.Role,
                 CooperationDay=u.CooperationDay,
+                PhoneNumber = u.PhoneNumber,
                 IdentityCard=u.IdentityCard,
                /* Subject = u.Subject,*/
                 Avatar = u.Avatar,

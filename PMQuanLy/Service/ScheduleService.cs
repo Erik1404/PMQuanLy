@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 
 namespace PMQuanLy.Service

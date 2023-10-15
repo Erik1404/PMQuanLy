@@ -12,8 +12,8 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20231010093608_DataStudent")]
-    partial class DataStudent
+    [Migration("20231014041613_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace PMQuanLy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CourseStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseYearId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -88,13 +91,35 @@ namespace PMQuanLy.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TuitionId")
+                        .HasColumnType("int");
+
                     b.HasKey("CourseRegistrationId");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
 
+                    b.HasIndex("TuitionId");
+
                     b.ToTable("CourseRegistrations");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.CourseYear", b =>
+                {
+                    b.Property<int>("CourseYearId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseYearId"));
+
+                    b.Property<string>("CourseYear_Year")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourseYearId");
+
+                    b.ToTable("CourseYears");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Report", b =>
@@ -160,6 +185,9 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectId"));
 
+                    b.Property<int>("CourseYearId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Subject_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -169,6 +197,8 @@ namespace PMQuanLy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubjectId");
+
+                    b.HasIndex("CourseYearId");
 
                     b.ToTable("Subjects");
                 });
@@ -204,19 +234,18 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TuitionId"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalTuition")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("TuitionId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Tuitions");
                 });
@@ -330,9 +359,22 @@ namespace PMQuanLy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PMQuanLy.Models.Tuition", null)
+                        .WithMany("CourseRegistrations")
+                        .HasForeignKey("TuitionId");
+
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
+                {
+                    b.HasOne("PMQuanLy.Models.CourseYear", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("CourseYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.TeacherCourse", b =>
@@ -354,9 +396,30 @@ namespace PMQuanLy.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("PMQuanLy.Models.Tuition", b =>
+                {
+                    b.HasOne("PMQuanLy.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.CourseYear", b =>
+                {
+                    b.Navigation("Subjects");
+                });
+
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.Tuition", b =>
+                {
+                    b.Navigation("CourseRegistrations");
                 });
 #pragma warning restore 612, 618
         }

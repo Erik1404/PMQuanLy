@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 
 namespace PMQuanLy.Service
@@ -13,51 +14,16 @@ namespace PMQuanLy.Service
             _dbContext = dbContext;
         }
 
+
         public async Task<List<Tuition>> GetAllTuitions()
         {
-            return await _dbContext.Tuitions.ToListAsync();
-        }
-
-        public async Task<Tuition> GetTuitionById(int tuitionId)
-        {
-            return await _dbContext.Tuitions.FindAsync(tuitionId);
-        }
-
-        public async Task<List<Tuition>> GetTuitionsByStudentId(int studentId)
-        {
             return await _dbContext.Tuitions
-                .Where(t => t.StudentId == studentId)
+                .Include(t => t.Student)
+                .Include(t => t.CourseRegistrations)
+                .ThenInclude(cr => cr.Course)
                 .ToListAsync();
         }
-
-        public async Task<Tuition> AddTuition(Tuition tuition)
-        {
-            _dbContext.Tuitions.Add(tuition);
-            await _dbContext.SaveChangesAsync();
-            return tuition;
-        }
-
-        public async Task<bool> DeleteTuition(int tuitionId)
-        {
-            var tuition = await _dbContext.Tuitions.FindAsync(tuitionId);
-            if (tuition == null)
-            {
-                return false;
-            }
-
-            _dbContext.Tuitions.Remove(tuition);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> UpdateTuition(Tuition tuition)
-        {
-            _dbContext.Entry(tuition).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<decimal> CalculateTotalTuitionForStudent(int studentId)
+        public async Task<decimal> GetTuitionByStudentId(int studentId)
         {
             // Lấy danh sách các khóa học đã đăng ký bởi học sinh
             var courseRegistrations = await _dbContext.CourseRegistrations

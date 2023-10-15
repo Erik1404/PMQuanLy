@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
-using PMQuanLy.Service;
 
 namespace PMQuanLy.Controllers
 {

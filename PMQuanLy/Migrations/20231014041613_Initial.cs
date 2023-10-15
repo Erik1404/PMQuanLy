@@ -12,6 +12,19 @@ namespace PMQuanLy.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CourseYears",
+                columns: table => new
+                {
+                    CourseYearId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseYear_Year = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseYears", x => x.CourseYearId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reports",
                 columns: table => new
                 {
@@ -45,36 +58,6 @@ namespace PMQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subjects",
-                columns: table => new
-                {
-                    SubjectId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Subject_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Subject_Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subjects", x => x.SubjectId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tuitions",
-                columns: table => new
-                {
-                    TuitionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tuitions", x => x.TuitionId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -102,6 +85,48 @@ namespace PMQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    SubjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Subject_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseYearId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.SubjectId);
+                    table.ForeignKey(
+                        name: "FK_Subjects_CourseYears_CourseYearId",
+                        column: x => x.CourseYearId,
+                        principalTable: "CourseYears",
+                        principalColumn: "CourseYearId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tuitions",
+                columns: table => new
+                {
+                    TuitionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    TotalTuition = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tuitions", x => x.TuitionId);
+                    table.ForeignKey(
+                        name: "FK_Tuitions_Users_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
@@ -112,9 +137,10 @@ namespace PMQuanLy.Migrations
                     SchoolDay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PriceCourse = table.Column<int>(type: "int", nullable: false),
-                    StatusCourse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseStatus = table.Column<int>(type: "int", nullable: false),
                     MinimumStudents = table.Column<int>(type: "int", nullable: false),
                     MaximumStudents = table.Column<int>(type: "int", nullable: false),
+                    CourseYearId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -136,7 +162,8 @@ namespace PMQuanLy.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TuitionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,6 +174,11 @@ namespace PMQuanLy.Migrations
                         principalTable: "Courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseRegistrations_Tuitions_TuitionId",
+                        column: x => x.TuitionId,
+                        principalTable: "Tuitions",
+                        principalColumn: "TuitionId");
                     table.ForeignKey(
                         name: "FK_CourseRegistrations_Users_StudentId",
                         column: x => x.StudentId,
@@ -192,9 +224,19 @@ namespace PMQuanLy.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseRegistrations_TuitionId",
+                table: "CourseRegistrations",
+                column: "TuitionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Courses_SubjectId",
                 table: "Courses",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subjects_CourseYearId",
+                table: "Subjects",
+                column: "CourseYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherCourses_CourseId",
@@ -205,6 +247,11 @@ namespace PMQuanLy.Migrations
                 name: "IX_TeacherCourses_TeacherId",
                 table: "TeacherCourses",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tuitions_StudentId",
+                table: "Tuitions",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
@@ -233,6 +280,9 @@ namespace PMQuanLy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "CourseYears");
         }
     }
 }

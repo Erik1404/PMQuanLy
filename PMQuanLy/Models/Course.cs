@@ -19,7 +19,7 @@ namespace PMQuanLy.Models
 
         public int MinimumStudents { get; set; }
         public int MaximumStudents { get; set; }
-
+       
         public int SubjectId { get; set; }
     }
 

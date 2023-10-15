@@ -1,6 +1,6 @@
 ﻿using PMQuanLy.Models;
 
-namespace PMQuanLy.Service
+namespace PMQuanLy.Interface
 {
     public interface ICourseRegistrationService
     {
@@ -10,6 +10,8 @@ namespace PMQuanLy.Service
         Task<bool> UnregisterStudentFromCourse(int courseRegistrationId);
         Task<List<CourseRegistration>> GetCourseRegistrationsForStudent(int studentId);
         Task<List<CourseRegistration>> GetCourseRegistrationsForCourse(int courseId);
+        Task<decimal> CalculateTotalTuitionForStudent(int studentId);
+
 
         Task<int> CountStudentInCourse(int CourseId);
     }

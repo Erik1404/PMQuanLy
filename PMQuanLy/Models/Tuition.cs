@@ -6,18 +6,26 @@ namespace PMQuanLy.Models
     {
         [Key]
         public int TuitionId { get; set; }
-
-        // Khóa ngoại đến Student (Học sinh)
         public int StudentId { get; set; }
         public Student Student { get; set; }
 
-        // Danh sách các CourseRegistration (đăng ký khóa học) của học sinh
-        public virtual ICollection<CourseRegistration> CourseRegistrations { get; set; }
+       
+
+        // Trạng thái thanh toán (đã thanh toán hoặc chưa thanh toán)
+        public bool IsPaid { get; set; }
 
         // Tổng học phí của học sinh
         public decimal TotalTuition { get; set; }
 
-        // Ngày thanh toán
-        public DateTime PaymentDate { get; set; }
+        // Danh sách các CourseRegistration (đăng ký khóa học) của học sinh
+        public virtual ICollection<CourseRegistration> CourseRegistrations { get; set; }
+
+
+        // Số tiền giảm giá
+        public decimal DiscountAmount { get; set; }
+
+        // Lý do giảm giá
+        public string DiscountReason { get; set; }
+
     }
 }

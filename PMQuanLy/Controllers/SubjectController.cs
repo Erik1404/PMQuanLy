@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PMQuanLy.Interface;
 using PMQuanLy.Models;
 using PMQuanLy.Service;
 
@@ -19,8 +20,15 @@ namespace PMQuanLy.Controllers
         [HttpGet("All Subjects")]
         public async Task<ActionResult<List<Subject>>> GetAllSubjects()
         {
-            var subjects = await _subjectService.GetAllSubjects();
-            return Ok(subjects);
+            try
+            {
+                var subjects = await _subjectService.GetAllSubjects();
+                return Ok(subjects);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("Search Subject")]

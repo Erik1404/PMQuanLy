@@ -99,6 +99,23 @@ namespace PMQuanLy.Migrations
                     b.ToTable("CourseRegistrations");
                 });
 
+            modelBuilder.Entity("PMQuanLy.Models.CourseYear", b =>
+                {
+                    b.Property<int>("CourseYearId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseYearId"));
+
+                    b.Property<string>("CourseYear_Year")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourseYearId");
+
+                    b.ToTable("CourseYears");
+                });
+
             modelBuilder.Entity("PMQuanLy.Models.Report", b =>
                 {
                     b.Property<int>("ReportId")
@@ -162,6 +179,9 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectId"));
 
+                    b.Property<int>("CourseYearId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Subject_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -171,6 +191,8 @@ namespace PMQuanLy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubjectId");
+
+                    b.HasIndex("CourseYearId");
 
                     b.ToTable("Subjects");
                 });
@@ -206,8 +228,8 @@ namespace PMQuanLy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TuitionId"));
 
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -340,6 +362,15 @@ namespace PMQuanLy.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("PMQuanLy.Models.Subject", b =>
+                {
+                    b.HasOne("PMQuanLy.Models.CourseYear", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("CourseYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PMQuanLy.Models.TeacherCourse", b =>
                 {
                     b.HasOne("PMQuanLy.Models.Course", "Course")
@@ -368,6 +399,11 @@ namespace PMQuanLy.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.CourseYear", b =>
+                {
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.Subject", b =>

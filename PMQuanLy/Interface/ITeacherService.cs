@@ -1,6 +1,6 @@
 ﻿using PMQuanLy.Models;
 
-namespace PMQuanLy.Service
+namespace PMQuanLy.Interface
 {
     public interface ITeacherService
     {

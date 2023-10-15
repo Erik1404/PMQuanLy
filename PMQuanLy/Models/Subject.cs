@@ -5,7 +5,7 @@
         public int SubjectId { get; set; }
         public string Subject_Name { get; set; }
         public string Subject_Description { get; set;}
-
+        public int CourseYearId { get; set; }
         public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }
