@@ -7,5 +7,7 @@ namespace PMQuanLy.Interface
         Task<List<Tuition>> GetAllTuitions();
         
         Task<decimal> GetTuitionByStudentId(int studentId);
+
+        Tuition UpdateTuition(int tuitionId, Tuition tuition);
     }
 }

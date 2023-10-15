@@ -72,6 +72,9 @@ namespace PMQuanLy.Service
                     StudentId = studentId,
                     IsPaid = false, // Ban đầu đánh dấu là chưa thanh toán
                     TotalTuition = totalTuition,
+                    DiscountReason = "No Discount",
+                    DiscountAmount = 0,
+                    TotalAmountAfterDiscount = totalTuition,
                 };
 
                 newTuition.CourseRegistrations = new List<CourseRegistration> { newRegistration };
@@ -81,6 +84,8 @@ namespace PMQuanLy.Service
             {
                 existingTuition.CourseRegistrations.Add(newRegistration);
                 existingTuition.TotalTuition = totalTuition;
+                existingTuition.TotalAmountAfterDiscount = totalTuition;
+
             }
 
             await _dbContext.SaveChangesAsync();
@@ -141,6 +146,9 @@ namespace PMQuanLy.Service
                         // Tính toán tổng học phí mới
                         decimal newTotalTuition = tuition.CourseRegistrations.Sum(cr => cr.Course.PriceCourse);
                         tuition.TotalTuition = newTotalTuition;
+                        tuition.DiscountReason = "No Discount";
+                        tuition.DiscountAmount = 0;
+                        tuition.TotalAmountAfterDiscount = newTotalTuition;
                     }
                 }
             }

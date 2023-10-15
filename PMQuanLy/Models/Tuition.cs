@@ -27,5 +27,8 @@ namespace PMQuanLy.Models
         // Lý do giảm giá
         public string DiscountReason { get; set; }
 
+        // Tổng tiền sau khi áp dụng giảm giá
+        public decimal TotalAmountAfterDiscount { get; set; }
+
     }
 }

@@ -71,5 +71,18 @@ namespace PMQuanLy.Controllers
             return Ok(response);
         }
 
+
+        [HttpPut("{tuitionId}")]
+        public IActionResult UpdateTuition(int tuitionId, [FromBody] Tuition tuition)
+        {
+            var updatedTuition = _tuitionService.UpdateTuition(tuitionId, tuition);
+
+            if (updatedTuition == null)
+            {
+                return NotFound("Không tìm thấy học phí để cập nhật.");
+            }
+
+            return Ok(updatedTuition);
+        }
     }
 }

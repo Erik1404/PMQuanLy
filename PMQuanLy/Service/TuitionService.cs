@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMQuanLy.Data;
 using PMQuanLy.Interface;
 using PMQuanLy.Models;
@@ -41,6 +42,25 @@ namespace PMQuanLy.Service
             return totalTuition;
         }
 
+        public Tuition UpdateTuition(int tuitionId, Tuition tuition)
+        {
+            var existingTuition = _dbContext.Tuitions.Find(tuitionId);
 
+            if (existingTuition == null)
+            {
+                return null; // Hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+            }
+
+            // Cập nhật thông tin Tuition dựa trên dữ liệu từ tuitionDTO
+            existingTuition.DiscountAmount = tuition.DiscountAmount;
+            existingTuition.DiscountReason = tuition.DiscountReason;
+
+            // Tính toán TotalAmountAfterDiscount
+            existingTuition.TotalAmountAfterDiscount = existingTuition.TotalTuition - tuition.DiscountAmount;
+
+            _dbContext.SaveChanges();
+
+            return existingTuition;
+        }
     }
 }
