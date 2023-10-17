@@ -42,7 +42,7 @@ namespace PMQuanLy.Service
             return totalTuition;
         }
 
-        public Tuition UpdateTuition(int tuitionId, Tuition tuition)
+        public Tuition UpdateTuition(int tuitionId, decimal DiscountAmount, string DiscountReason)
         {
             var existingTuition = _dbContext.Tuitions.Find(tuitionId);
 
@@ -52,15 +52,54 @@ namespace PMQuanLy.Service
             }
 
             // Cập nhật thông tin Tuition dựa trên dữ liệu từ tuitionDTO
-            existingTuition.DiscountAmount = tuition.DiscountAmount;
-            existingTuition.DiscountReason = tuition.DiscountReason;
+            existingTuition.DiscountAmount = DiscountAmount;
+            existingTuition.DiscountReason = DiscountReason;
 
             // Tính toán TotalAmountAfterDiscount
-            existingTuition.TotalAmountAfterDiscount = existingTuition.TotalTuition - tuition.DiscountAmount;
+            existingTuition.TotalAmountAfterDiscount = existingTuition.TotalTuition - DiscountAmount;
 
             _dbContext.SaveChanges();
 
             return existingTuition;
         }
+
+        public Tuition Checkout(int tuitionId, decimal amountPaid)
+        {
+            var existingTuition = _dbContext.Tuitions.Find(tuitionId);
+
+            if (existingTuition == null)
+            {
+                return null; // Hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+            }
+
+            // Kiểm tra nếu học sinh đã đóng nhiều hơn số tiền cần phải trả
+            if (amountPaid >= existingTuition.TotalAmountAfterDiscount)
+            {
+                existingTuition.IsPaid = true;
+            }
+
+            // Cập nhật AmountPaid bằng tổng số tiền học sinh đã đóng
+            existingTuition.AmountPaid += amountPaid;
+
+            // Tính RemainingAmount dựa trên sự chênh lệch giữa TotalAmountAfterDiscount và AmountPaid
+            existingTuition.RemainingAmount = existingTuition.TotalAmountAfterDiscount - existingTuition.AmountPaid;
+
+            // Tạo một bản ghi PaymentHistory
+            var paymentHistory = new PaymentHistory
+            {
+                TuitionId = existingTuition.TuitionId,
+                PaymentDate = DateTime.Now,
+                AmountPaid = amountPaid,
+                RemainingAmount = existingTuition.RemainingAmount,
+                IsPaid = existingTuition.IsPaid,
+            };
+
+            // Thêm paymentHistory vào cơ sở dữ liệu
+            _dbContext.PaymentHistories.Add(paymentHistory);
+            _dbContext.SaveChanges();
+
+            return existingTuition;
+        }
+
     }
 }

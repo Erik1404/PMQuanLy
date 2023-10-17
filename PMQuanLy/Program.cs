@@ -27,6 +27,7 @@ builder.Services.AddScoped<ITeacherCourseService, TeacherCourseService>();
 builder.Services.AddScoped<ITuitionService, TuitionService>();
 builder.Services.AddScoped<ICourseRegistrationService, CourseRegistrationService>();
 builder.Services.AddScoped<ICourseYearService, CourseYearService>();
+builder.Services.AddScoped<IPaymentHistoryService, PaymentHistoryService>();
 
 
 

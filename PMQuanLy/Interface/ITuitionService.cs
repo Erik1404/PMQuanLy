@@ -8,6 +8,9 @@ namespace PMQuanLy.Interface
         
         Task<decimal> GetTuitionByStudentId(int studentId);
 
-        Tuition UpdateTuition(int tuitionId, Tuition tuition);
+        Tuition UpdateTuition(int tuitionId, decimal DiscountAmount, string DiscountReason);
+
+        Tuition Checkout(int tuitionId, decimal amountPaid);
+
     }
 }
