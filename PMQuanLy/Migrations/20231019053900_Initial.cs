@@ -113,7 +113,12 @@ namespace PMQuanLy.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     IsPaid = table.Column<bool>(type: "bit", nullable: false),
-                    TotalTuition = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    TotalTuition = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DiscountReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RemainingAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalAmountAfterDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,7 +145,10 @@ namespace PMQuanLy.Migrations
                     CourseStatus = table.Column<int>(type: "int", nullable: false),
                     MinimumStudents = table.Column<int>(type: "int", nullable: false),
                     MaximumStudents = table.Column<int>(type: "int", nullable: false),
-                    CourseYearId = table.Column<int>(type: "int", nullable: false),
+                    DayStartCourse = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DayuEndCourse = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RegistrationStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RegistrationEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -151,6 +159,29 @@ namespace PMQuanLy.Migrations
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "SubjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentHistories",
+                columns: table => new
+                {
+                    PaymentHistoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TuitionId = table.Column<int>(type: "int", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    AmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RemainingAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentHistories", x => x.PaymentHistoryId);
+                    table.ForeignKey(
+                        name: "FK_PaymentHistories_Tuitions_TuitionId",
+                        column: x => x.TuitionId,
+                        principalTable: "Tuitions",
+                        principalColumn: "TuitionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -213,6 +244,31 @@ namespace PMQuanLy.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Scores",
+                columns: table => new
+                {
+                    ScoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Score1_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score1 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Score2_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score2 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Score3_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score3 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CourseRegistrationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scores", x => x.ScoreId);
+                    table.ForeignKey(
+                        name: "FK_Scores_CourseRegistrations_CourseRegistrationId",
+                        column: x => x.CourseRegistrationId,
+                        principalTable: "CourseRegistrations",
+                        principalColumn: "CourseRegistrationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CourseRegistrations_CourseId",
                 table: "CourseRegistrations",
@@ -232,6 +288,16 @@ namespace PMQuanLy.Migrations
                 name: "IX_Courses_SubjectId",
                 table: "Courses",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentHistories_TuitionId",
+                table: "PaymentHistories",
+                column: "TuitionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Scores_CourseRegistrationId",
+                table: "Scores",
+                column: "CourseRegistrationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subjects_CourseYearId",
@@ -258,7 +324,7 @@ namespace PMQuanLy.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CourseRegistrations");
+                name: "PaymentHistories");
 
             migrationBuilder.DropTable(
                 name: "Reports");
@@ -267,19 +333,25 @@ namespace PMQuanLy.Migrations
                 name: "Schedules");
 
             migrationBuilder.DropTable(
+                name: "Scores");
+
+            migrationBuilder.DropTable(
                 name: "TeacherCourses");
 
             migrationBuilder.DropTable(
-                name: "Tuitions");
+                name: "CourseRegistrations");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Tuitions");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "CourseYears");

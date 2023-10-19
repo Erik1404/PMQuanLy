@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PMQuanLy.Models
 {
@@ -14,8 +15,6 @@ namespace PMQuanLy.Models
         // Khóa ngoại đến Course (Khóa học)
         public int CourseId { get; set; }
         public Course Course { get; set; }
-
-      
 
         // Thời gian đăng ký
         public DateTime RegistrationDate { get; set; }

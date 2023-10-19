@@ -28,7 +28,7 @@ builder.Services.AddScoped<ITuitionService, TuitionService>();
 builder.Services.AddScoped<ICourseRegistrationService, CourseRegistrationService>();
 builder.Services.AddScoped<ICourseYearService, CourseYearService>();
 builder.Services.AddScoped<IPaymentHistoryService, PaymentHistoryService>();
-
+builder.Services.AddScoped<IScoreService, ScoreService>();
 
 
 builder.Services.AddSwaggerGen();

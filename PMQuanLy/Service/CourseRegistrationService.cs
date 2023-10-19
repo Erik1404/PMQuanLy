@@ -30,6 +30,8 @@ namespace PMQuanLy.Service
             var student = await _dbContext.Students.FindAsync(studentId);
             var course = await _dbContext.Courses.FindAsync(courseId);
 
+
+
             if (student == null || course == null)
             {
                 return null; // Không tìm thấy học sinh hoặc khóa học
@@ -39,6 +41,13 @@ namespace PMQuanLy.Service
             {
                 return null; // Người dùng không phải là học sinh
             }
+
+            var today = DateTime.Now;
+            if (today < course.RegistrationStartDate || today > course.RegistrationEndDate)
+            {
+                return null; // Ngày hiện tại không nằm trong thời gian đăng ký
+            }
+
 
             // Kiểm tra xem học sinh đã có Tuition hay chưa
             var existingTuition = await _dbContext.Tuitions
@@ -121,11 +130,6 @@ namespace PMQuanLy.Service
 
             return courseRegistration;
         }
-
-
-
-
-
 
         public async Task<decimal> CalculateTotalTuitionForStudent(int studentId)
         {

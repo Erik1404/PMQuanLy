@@ -19,7 +19,18 @@ namespace PMQuanLy.Models
 
         public int MinimumStudents { get; set; }
         public int MaximumStudents { get; set; }
-       
+
+        // Ngày bắt đầu học
+        public DateTime DayStartCourse { get; set; }
+
+        // Ngày kết thúc
+        public DateTime DayuEndCourse { get; set; }
+
+        // Ngày mở đăng ký lớp học này
+        public DateTime RegistrationStartDate { get; set; }
+        public DateTime RegistrationEndDate { get; set; }
+
+
         public int SubjectId { get; set; }
     }
 

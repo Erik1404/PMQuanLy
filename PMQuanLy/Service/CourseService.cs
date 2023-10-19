@@ -46,6 +46,8 @@ namespace PMQuanLy.Service
                 TimeClass = Course.TimeClass,
                 PriceCourse = Course.PriceCourse,
                 CourseStatus = CourseStatus.Open,
+                RegistrationStartDate = Course.RegistrationStartDate,
+                RegistrationEndDate = Course.RegistrationEndDate,
                 SubjectId = Course.SubjectId,
                
             };
