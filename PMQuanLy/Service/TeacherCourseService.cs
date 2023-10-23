@@ -30,7 +30,7 @@ namespace PMQuanLy.Service
                 // Kiểm tra xem giáo viên đã giảng dạy khóa học này chưa
                 if (_dbContext.TeacherCourses.Any(tc => tc.TeacherId == teacherId && tc.CourseId == courseId))
                 {
-                    return false; // Giáo viên đã giảng dạy khóa học này rồi
+                    throw new Exception("Giáo viên đã giảng dạy khóa học này rồi");
                 }
 
                 var teacherCourse = new TeacherCourse

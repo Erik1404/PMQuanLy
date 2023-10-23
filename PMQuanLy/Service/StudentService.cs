@@ -37,7 +37,7 @@ namespace PMQuanLy.Service
                 Gender = u.Gender,
                 Address = u.Address,
                 Role = u.Role,
-                ParentName = u.ParentName, // Thêm các trường dữ liệu cần thiết
+                ParentName = u.ParentName,
                 ParentPhone = u.ParentPhone,
                 Avatar = u.Avatar,
             }).ToList();

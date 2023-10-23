@@ -16,7 +16,6 @@ namespace PMQuanLy.Service
 
           public async Task<List<CourseEnrollment>> GetAllCourseEnrollments()
     {
-        // Sử dụng Entity Framework để lấy tất cả các CourseEnrollments
         return await _dbContext.CourseEnrollments.ToListAsync();
     }
 
@@ -46,7 +45,6 @@ namespace PMQuanLy.Service
             }
             if (courseEnrollment != null)
             {
-                // Tạo bản ghi StudentScore từ thông tin truyền vào
                 var studentScore = new StudentScore
                 {
                     CourseEnrollmentId = courseEnrollmentId,

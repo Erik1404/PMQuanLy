@@ -9,7 +9,6 @@ namespace PMQuanLy.Interface
         Task<bool> UnregisterStudentFromCourse(int courseRegistrationId);
         Task<List<CourseRegistration>> GetCourseRegistrationsForStudent(int studentId);
         Task<List<CourseRegistration>> GetCourseRegistrationsForCourse(int courseId);
-        Task<decimal> CalculateTotalTuitionForStudent(int studentId);
         Task<CourseRegistration> RegisterStudentForCourse(int studentId, int courseId);
         Task<int> CountStudentInCourse(int CourseId);
     }

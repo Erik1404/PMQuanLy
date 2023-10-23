@@ -66,13 +66,13 @@ namespace PMQuanLy.Service
 
             if (existingTeacher == null)
             {
-                throw new ArgumentException("Sinh viên không tồn tại.");
+                throw new ArgumentException("Không tìm được dữ liệu");
             }
 
             // Kiểm tra xem Role của sinh viên có phải là "Teacher" không
             if (existingTeacher.Role != "Teacher")
             {
-                throw new ArgumentException("Không thể chỉnh sửa thông tin của người dùng không phải là sinh viên.");
+                throw new ArgumentException("Không thể chỉnh sửa thông tin của người dùng không phải là Giáo viên");
             }
 
             // Cập nhật thông tin sinh viên và lưu vào cơ sở dữ liệu

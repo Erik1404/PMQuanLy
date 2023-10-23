@@ -7,7 +7,6 @@ namespace PMQuanLy.Models
         [Key]
         public int StudentScoreId { get; set; }
 
-        // Khóa ngoại đến CourseEnrollment (để biết học sinh thuộc lớp nào)
         public int CourseEnrollmentId { get; set; }
         public CourseEnrollment CourseEnrollment { get; set; }
 
@@ -21,7 +20,7 @@ namespace PMQuanLy.Models
         // Xếp loại (ví dụ: "Trung bình", "Khá", "Giỏi")
         public string ScoreClassification { get; set; }
 
-        // Hệ số (ví dụ: 1, 3)
+        // Hệ số
         public double ScoreCoefficient { get; set; }
     }
 }

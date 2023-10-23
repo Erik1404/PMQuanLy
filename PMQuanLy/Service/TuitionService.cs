@@ -48,7 +48,7 @@ namespace PMQuanLy.Service
 
             if (existingTuition == null)
             {
-                return null; // Hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+                return null;
             }
 
             // Cập nhật thông tin Tuition dựa trên dữ liệu từ tuitionDTO
@@ -69,7 +69,7 @@ namespace PMQuanLy.Service
 
             if (existingTuition == null)
             {
-                return null; // Hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+                return null; 
             }
 
             // Kiểm tra nếu học sinh đã đóng nhiều hơn số tiền cần phải trả
@@ -81,10 +81,9 @@ namespace PMQuanLy.Service
             // Cập nhật AmountPaid bằng tổng số tiền học sinh đã đóng
             existingTuition.AmountPaid += amountPaid;
 
-            // Tính RemainingAmount dựa trên sự chênh lệch giữa TotalAmountAfterDiscount và AmountPaid
+            // Số tiền còn lại
             existingTuition.RemainingAmount = existingTuition.TotalAmountAfterDiscount - existingTuition.AmountPaid;
 
-            // Tạo một bản ghi PaymentHistory
             var paymentHistory = new PaymentHistory
             {
                 TuitionId = existingTuition.TuitionId,
@@ -94,7 +93,6 @@ namespace PMQuanLy.Service
                 IsPaid = existingTuition.IsPaid,
             };
 
-            // Thêm paymentHistory vào cơ sở dữ liệu
             _dbContext.PaymentHistories.Add(paymentHistory);
             _dbContext.SaveChanges();
 

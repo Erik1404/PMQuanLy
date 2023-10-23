@@ -30,12 +30,12 @@ namespace PMQuanLy.Service
 
             if (student == null || course == null)
             {
-                return null; // Không tìm thấy học sinh hoặc khóa học
+                throw new Exception("Không tìm thấy dữ liệu bạn cần để đăng ký. Thử lại sau");
             }
 
             if (student.Role != "Student")
             {
-                return null; // Người dùng không phải là học sinh
+                throw new Exception("Tài khoản của bạn không thuộc vào diện đăng ký môn học");
             }
 
             var today = DateTime.Now;
@@ -134,23 +134,6 @@ namespace PMQuanLy.Service
             return courseRegistration;
         }
 
-        public async Task<decimal> CalculateTotalTuitionForStudent(int studentId)
-        {
-            // Lấy danh sách các khóa học đã đăng ký bởi học sinh
-            var courseRegistrations = await _dbContext.CourseRegistrations
-                .Include(cr => cr.Course)
-                .Where(cr => cr.StudentId == studentId)
-                .ToListAsync();
-
-            decimal totalTuition = 0;
-
-            foreach (var registration in courseRegistrations)
-            {
-                totalTuition += registration.Course.PriceCourse;
-            }
-
-            return totalTuition;
-        }
 
         public async Task<bool> UnregisterStudentFromCourse(int courseRegistrationId)
         {
@@ -164,7 +147,7 @@ namespace PMQuanLy.Service
             // Tìm Tuition tương ứng
             var tuitions = await _dbContext.Tuitions
                 .Include(t => t.CourseRegistrations)
-                .ThenInclude(cr => cr.Course) // Đảm bảo Course cũng được tải
+                .ThenInclude(cr => cr.Course)
                 .Where(t => t.StudentId == courseRegistration.StudentId)
                 .ToListAsync();
 
@@ -191,7 +174,6 @@ namespace PMQuanLy.Service
                     }
                 }
             }
-
             _dbContext.CourseRegistrations.Remove(courseRegistration);
             await _dbContext.SaveChangesAsync();
 
