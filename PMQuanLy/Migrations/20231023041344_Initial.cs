@@ -245,29 +245,64 @@ namespace PMQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Scores",
+                name: "CourseEnrollments",
                 columns: table => new
                 {
-                    ScoreId = table.Column<int>(type: "int", nullable: false)
+                    CourseEnrollmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Score1_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Score1 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Score2_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Score2 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Score3_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Score3 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TeacherCourseId = table.Column<int>(type: "int", nullable: false),
                     CourseRegistrationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Scores", x => x.ScoreId);
+                    table.PrimaryKey("PK_CourseEnrollments", x => x.CourseEnrollmentId);
                     table.ForeignKey(
-                        name: "FK_Scores_CourseRegistrations_CourseRegistrationId",
+                        name: "FK_CourseEnrollments_CourseRegistrations_CourseRegistrationId",
                         column: x => x.CourseRegistrationId,
                         principalTable: "CourseRegistrations",
                         principalColumn: "CourseRegistrationId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseEnrollments_TeacherCourses_TeacherCourseId",
+                        column: x => x.TeacherCourseId,
+                        principalTable: "TeacherCourses",
+                        principalColumn: "TeacherCourseId");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "StudentScores",
+                columns: table => new
+                {
+                    StudentScoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseEnrollmentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    ScoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ScoreValue = table.Column<double>(type: "float", nullable: false),
+                    ScoreClassification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ScoreCoefficient = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentScores", x => x.StudentScoreId);
+                    table.ForeignKey(
+                        name: "FK_StudentScores_CourseEnrollments_CourseEnrollmentId",
+                        column: x => x.CourseEnrollmentId,
+                        principalTable: "CourseEnrollments",
+                        principalColumn: "CourseEnrollmentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseEnrollments_CourseRegistrationId",
+                table: "CourseEnrollments",
+                column: "CourseRegistrationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseEnrollments_TeacherCourseId",
+                table: "CourseEnrollments",
+                column: "TeacherCourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseRegistrations_CourseId",
@@ -295,9 +330,9 @@ namespace PMQuanLy.Migrations
                 column: "TuitionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Scores_CourseRegistrationId",
-                table: "Scores",
-                column: "CourseRegistrationId");
+                name: "IX_StudentScores_CourseEnrollmentId",
+                table: "StudentScores",
+                column: "CourseEnrollmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subjects_CourseYearId",
@@ -333,25 +368,28 @@ namespace PMQuanLy.Migrations
                 name: "Schedules");
 
             migrationBuilder.DropTable(
-                name: "Scores");
+                name: "StudentScores");
 
             migrationBuilder.DropTable(
-                name: "TeacherCourses");
+                name: "CourseEnrollments");
 
             migrationBuilder.DropTable(
                 name: "CourseRegistrations");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "TeacherCourses");
 
             migrationBuilder.DropTable(
                 name: "Tuitions");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "CourseYears");

@@ -30,8 +30,9 @@ namespace PMQuanLy.Models
         public DateTime RegistrationStartDate { get; set; }
         public DateTime RegistrationEndDate { get; set; }
 
-
         public int SubjectId { get; set; }
+
+
     }
 
     public enum CourseStatus

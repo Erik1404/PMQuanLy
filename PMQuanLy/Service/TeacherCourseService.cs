@@ -41,7 +41,6 @@ namespace PMQuanLy.Service
 
                 _dbContext.TeacherCourses.Add(teacherCourse);
                 await _dbContext.SaveChangesAsync();
-
                 return true;
             }
             catch (Exception)
@@ -49,7 +48,6 @@ namespace PMQuanLy.Service
                 return false;
             }
         }
-
 
         public async Task<bool> AddTeacherToCourse(int courseId, int teacherId)
         {
@@ -77,7 +75,6 @@ namespace PMQuanLy.Service
 
                 _dbContext.TeacherCourses.Add(teacherCourse);
                 await _dbContext.SaveChangesAsync();
-
                 return true;
             }
             catch (Exception)
@@ -86,9 +83,6 @@ namespace PMQuanLy.Service
                 return false;
             }
         }
-
-
-
 
         public async Task<List<Course>> GetCoursesForTeacher(int teacherId)
         {

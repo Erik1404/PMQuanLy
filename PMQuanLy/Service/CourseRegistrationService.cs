@@ -13,8 +13,6 @@ namespace PMQuanLy.Service
         {
             _dbContext = dbContext;
         }
-
-
         public async Task<List<CourseRegistration>> GetAllCourseRegistrations()
         {
             return await _dbContext.CourseRegistrations.ToListAsync();
@@ -29,8 +27,6 @@ namespace PMQuanLy.Service
         {
             var student = await _dbContext.Students.FindAsync(studentId);
             var course = await _dbContext.Courses.FindAsync(courseId);
-
-
 
             if (student == null || course == null)
             {
@@ -48,25 +44,20 @@ namespace PMQuanLy.Service
                 return null; // Ngày hiện tại không nằm trong thời gian đăng ký
             }
 
-
-            // Kiểm tra xem học sinh đã có Tuition hay chưa
             var existingTuition = await _dbContext.Tuitions
                 .Include(t => t.CourseRegistrations)
                 .Where(t => t.StudentId == studentId)
                 .SingleOrDefaultAsync();
-
             var existingRegistration = existingTuition?.CourseRegistrations.FirstOrDefault(cr => cr.CourseId == courseId);
 
             if (existingRegistration != null)
             {
-                // Học sinh đã đăng ký khóa học này, kiểm tra IsPaid
                 if (existingTuition.IsPaid)
                 {
-                    // Tạo một Tuition mới vì IsPaid = True
                     var newTuition = new Tuition
                     {
                         StudentId = studentId,
-                        IsPaid = false, // Đánh dấu là chưa thanh toán
+                        IsPaid = false,
                         TotalTuition = course.PriceCourse,
                         DiscountReason = "No Discount",
                         DiscountAmount = 0,
@@ -83,25 +74,27 @@ namespace PMQuanLy.Service
 
                     newTuition.CourseRegistrations = new List<CourseRegistration> { newCourseRegistration };
 
-                    _dbContext.SaveChanges();
+                    /*_dbContext.SaveChanges(); // Lưu thay đổi trước*/
+
+                     existingTuition?.CourseRegistrations.FirstOrDefault(cr => cr.CourseId == courseId);
+                  
 
                     return newCourseRegistration;
                 }
                 else
                 {
-                    // Học sinh vẫn chưa thanh toán, không thay đổi gì
                     return existingRegistration;
                 }
             }
 
-            // Học sinh chưa đăng ký môn này, tạo một CourseRegistration mới
             var courseRegistration = new CourseRegistration
             {
                 StudentId = studentId,
                 CourseId = courseId,
-                RegistrationDate = DateTime.Now
+                RegistrationDate = DateTime.Now,
             };
 
+       
             // Kiểm tra xem existingTuition đã được tạo chưa
             if (existingTuition == null)
             {
@@ -109,7 +102,7 @@ namespace PMQuanLy.Service
                 existingTuition = new Tuition
                 {
                     StudentId = studentId,
-                    IsPaid = false, // Ban đầu đánh dấu là chưa thanh toán
+                    IsPaid = false,
                     TotalTuition = totalTuition,
                     DiscountReason = "No Discount",
                     DiscountAmount = 0,
@@ -125,8 +118,18 @@ namespace PMQuanLy.Service
                 existingTuition.TotalTuition += course.PriceCourse;
                 existingTuition.TotalAmountAfterDiscount = existingTuition.TotalTuition;
             }
+            _dbContext.SaveChanges(); // Lưu thay đổi sau
 
-            await _dbContext.SaveChangesAsync();
+            var getteacherCourse = _dbContext.TeacherCourses.FirstOrDefault(tc => tc.CourseId == courseId);
+            var CourseEnrollment = new CourseEnrollment
+            {
+
+                TeacherCourseId = getteacherCourse.TeacherCourseId,
+                CourseRegistrationId = courseRegistration.CourseRegistrationId,
+                
+            };
+            _dbContext.CourseEnrollments.Add(CourseEnrollment);
+            _dbContext.SaveChanges();
 
             return courseRegistration;
         }
@@ -148,7 +151,6 @@ namespace PMQuanLy.Service
 
             return totalTuition;
         }
-
 
         public async Task<bool> UnregisterStudentFromCourse(int courseRegistrationId)
         {

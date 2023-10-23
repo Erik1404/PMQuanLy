@@ -19,13 +19,30 @@ namespace PMQuanLy.Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<CourseYear> CourseYears { get; set; }
-        public DbSet<Score> Scores { get; set; }
+        public DbSet<StudentScore> StudentScores { get; set; }
 
         public DbSet<PaymentHistory> PaymentHistories { get; set; }
 
         public DbSet<TeacherCourse> TeacherCourses { get; set; }
+        public DbSet<CourseEnrollment> CourseEnrollments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+            // Liên kết giữa CourseEnrollment và CourseRegistration
+            modelBuilder.Entity<CourseEnrollment>()
+                .HasOne(ce => ce.CourseRegistration)
+                .WithMany()
+                .HasForeignKey(ce => ce.CourseRegistrationId);
+
+            // Liên kết giữa CourseEnrollment và TeacherCourse
+            modelBuilder.Entity<CourseEnrollment>()
+                .HasOne(ce => ce.TeacherCourse)
+                .WithMany()
+                .HasForeignKey(ce => ce.TeacherCourseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+        }
+
     }
-
-
-
 }

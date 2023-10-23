@@ -11,10 +11,12 @@ namespace PMQuanLy.Controllers
     public class CourseRegistrationController : ControllerBase
     {
         private readonly ICourseRegistrationService _courseRegistrationService;
+        private readonly ICourseEnrollmentService _courseEnrollmentService;
 
-        public CourseRegistrationController(ICourseRegistrationService courseRegistrationService)
+        public CourseRegistrationController(ICourseRegistrationService courseRegistrationService, ICourseEnrollmentService courseEnrollmentService)
         {
             _courseRegistrationService = courseRegistrationService;
+            _courseEnrollmentService = courseEnrollmentService;
         }
 
 
@@ -39,18 +41,19 @@ namespace PMQuanLy.Controllers
         }
 
         [HttpPost]
-        [Route("RegisterStudentForCourse")]
+        [Route("register")]
         public async Task<IActionResult> RegisterStudentForCourse(int studentId, int courseId)
         {
-            var registration = await _courseRegistrationService.RegisterStudentForCourse(studentId, courseId);
+            var result = await _courseRegistrationService.RegisterStudentForCourse(studentId, courseId);
 
-            if (registration == null)
+            if (result != null)
             {
-                return BadRequest(new { message = "Đăng ký không thành công" });
+                return Ok(result);
             }
 
-            return Ok(new { message = "Đăng ký thành công", registration });
+            return BadRequest("Failed to register the student for the course.");
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> UnregisterStudentFromCourse(int id)

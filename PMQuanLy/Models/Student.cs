@@ -4,5 +4,7 @@
     {
         public int ParentPhone { get; set; }
         public string ParentName { get; set; }
+
+       
     }
 }

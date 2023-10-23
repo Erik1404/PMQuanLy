@@ -41,10 +41,6 @@ namespace PMQuanLy.Service
             return TeacherList;
         }
 
-
-
-
-
         //Delete Teacher
         public async Task<bool> DeleteTeacher(int userId)
         {
@@ -61,8 +57,6 @@ namespace PMQuanLy.Service
 
             return false;
         }
-
-
 
 
         public async Task<bool> UpdateTeacher(Teacher Teacher)
@@ -89,25 +83,13 @@ namespace PMQuanLy.Service
         }
 
 
-
-        // Check Form Email , Password and Phone
-        private bool IsValidPhoneNumber(int phoneNumber)
+          public async Task<List<CourseEnrollment>> GetCoursesAndStudentsByTeacherId(int teacherId)
         {
-            string phoneNumberString = phoneNumber.ToString();
-
-            // Phone number must be 10 digits and can start with number 0 with form NumberPhone of VN
-            return phoneNumberString.Length == 10 && phoneNumberString.All(char.IsDigit);
-        }
-        private bool IsValidEmail(string email)
-        {
-            // Check Form EMAIL
-            return !string.IsNullOrEmpty(email) && email.Contains("@");
-        }
-
-        private bool IsValidPassword(string password)
-        {
-            // Password need >= 8 characters
-            return !string.IsNullOrEmpty(password) && password.Length >= 8;
+            return await _dbContext.CourseEnrollments
+                .Where(ce => ce.TeacherCourse.Teacher.UserId == teacherId)
+                .Include(ce => ce.TeacherCourse)
+                .Include(ce => ce.CourseRegistration.Student)
+                .ToListAsync();
         }
     }
 }

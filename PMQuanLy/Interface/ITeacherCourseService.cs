@@ -7,7 +7,6 @@ namespace PMQuanLy.Interface
         Task<bool> AddCourseForTeacher(int teacherId, int courseId);
         Task<bool> AddTeacherToCourse(int courseId, int teacherId);
 
-
         Task<List<Course>> GetCoursesForTeacher(int teacherId);
         Task<List<Teacher>> GetTeachersForCourse(int courseId);
 

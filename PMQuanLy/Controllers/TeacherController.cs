@@ -70,5 +70,27 @@ namespace PMQuanLy.Controllers
                 return BadRequest(new { message = "Có lỗi xảy ra " });
             }
         }
+
+        [HttpGet("{teacherId}/courses-and-students")]
+        public async Task<IActionResult> GetCoursesAndStudentsByTeacherId(int teacherId)
+        {
+            try
+            {
+                var coursesAndStudents = await _teacherService.GetCoursesAndStudentsByTeacherId(teacherId);
+
+                if (coursesAndStudents == null || !coursesAndStudents.Any())
+                {
+                    // Trường hợp không tìm thấy dữ liệu, trả về lỗi 404 và thông báo.
+                    return NotFound("Giáo viên này có thể chưa được phân công môn giảng dạy nào");
+                }
+
+                return Ok(coursesAndStudents);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

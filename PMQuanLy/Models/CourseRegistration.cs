@@ -18,5 +18,6 @@ namespace PMQuanLy.Models
 
         // Thời gian đăng ký
         public DateTime RegistrationDate { get; set; }
+
     }
 }
