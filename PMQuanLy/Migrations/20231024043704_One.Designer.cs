@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PMQuanLy.Data;
 
@@ -11,9 +12,11 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    partial class PMQLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231024043704_One")]
+    partial class One
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,15 +250,9 @@ namespace PMQuanLy.Migrations
                     b.Property<double>("AverageScore")
                         .HasColumnType("float");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ScoreClassification")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StudentScoreId")
                         .HasColumnType("int");

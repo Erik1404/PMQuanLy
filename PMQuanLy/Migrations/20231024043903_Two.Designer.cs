@@ -12,8 +12,8 @@ using PMQuanLy.Data;
 namespace PMQuanLy.Migrations
 {
     [DbContext(typeof(PMQLDbContext))]
-    [Migration("20231023041344_Initial")]
-    partial class Initial
+    [Migration("20231024043903_Two")]
+    partial class Two
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -239,6 +239,37 @@ namespace PMQuanLy.Migrations
                     b.ToTable("Schedules");
                 });
 
+            modelBuilder.Entity("PMQuanLy.Models.Score", b =>
+                {
+                    b.Property<int>("ScoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScoreId"));
+
+                    b.Property<double>("AverageScore")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScoreClassification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentScoreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScoreId");
+
+                    b.HasIndex("StudentScoreId");
+
+                    b.ToTable("Scores");
+                });
+
             modelBuilder.Entity("PMQuanLy.Models.StudentScore", b =>
                 {
                     b.Property<int>("StudentScoreId")
@@ -252,10 +283,6 @@ namespace PMQuanLy.Migrations
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ScoreClassification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ScoreCoefficient")
                         .HasColumnType("float");
@@ -512,6 +539,17 @@ namespace PMQuanLy.Migrations
                         .IsRequired();
 
                     b.Navigation("Tuition");
+                });
+
+            modelBuilder.Entity("PMQuanLy.Models.Score", b =>
+                {
+                    b.HasOne("PMQuanLy.Models.StudentScore", "StudentScore")
+                        .WithMany()
+                        .HasForeignKey("StudentScoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentScore");
                 });
 
             modelBuilder.Entity("PMQuanLy.Models.StudentScore", b =>

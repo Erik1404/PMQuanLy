@@ -17,8 +17,6 @@ namespace PMQuanLy.Models
 
         public double ScoreValue { get; set; }
 
-        // Xếp loại (ví dụ: "Trung bình", "Khá", "Giỏi")
-        public string ScoreClassification { get; set; }
 
         // Hệ số
         public double ScoreCoefficient { get; set; }

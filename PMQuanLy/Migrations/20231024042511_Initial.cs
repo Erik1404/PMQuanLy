@@ -280,7 +280,6 @@ namespace PMQuanLy.Migrations
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     ScoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScoreValue = table.Column<double>(type: "float", nullable: false),
-                    ScoreClassification = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScoreCoefficient = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -291,6 +290,28 @@ namespace PMQuanLy.Migrations
                         column: x => x.CourseEnrollmentId,
                         principalTable: "CourseEnrollments",
                         principalColumn: "CourseEnrollmentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Scores",
+                columns: table => new
+                {
+                    ScoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentScoredId = table.Column<int>(type: "int", nullable: false),
+                    StudentScoreId = table.Column<int>(type: "int", nullable: false),
+                    AverageScore = table.Column<double>(type: "float", nullable: false),
+                    ScoreClassification = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scores", x => x.ScoreId);
+                    table.ForeignKey(
+                        name: "FK_Scores_StudentScores_StudentScoreId",
+                        column: x => x.StudentScoreId,
+                        principalTable: "StudentScores",
+                        principalColumn: "StudentScoreId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -330,6 +351,11 @@ namespace PMQuanLy.Migrations
                 column: "TuitionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Scores_StudentScoreId",
+                table: "Scores",
+                column: "StudentScoreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentScores_CourseEnrollmentId",
                 table: "StudentScores",
                 column: "CourseEnrollmentId");
@@ -366,6 +392,9 @@ namespace PMQuanLy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "Scores");
 
             migrationBuilder.DropTable(
                 name: "StudentScores");

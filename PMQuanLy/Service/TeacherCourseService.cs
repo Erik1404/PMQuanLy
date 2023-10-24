@@ -64,7 +64,7 @@ namespace PMQuanLy.Service
                 // Kiểm tra xem giáo viên đã được giao khóa học này chưa
                 if (_dbContext.TeacherCourses.Any(tc => tc.TeacherId == teacherId && tc.CourseId == courseId))
                 {
-                    return false; // Giáo viên đã được giao khóa học này rồi
+                    throw new Exception("Giáo viên đã giảng dạy khóa học này rồi");
                 }
 
                 var teacherCourse = new TeacherCourse
@@ -79,7 +79,6 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
                 return false;
             }
         }
@@ -116,7 +115,6 @@ namespace PMQuanLy.Service
             }
             catch (Exception)
             {
-                // Xử lý lỗi
                 return null;
             }
         }
